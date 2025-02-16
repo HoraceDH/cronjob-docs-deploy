@@ -1,227 +1,184 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>cron-job 分布式任务调度平台 – 架构设计</title>
-    <link>http://localhost:1313/docs/arch/</link>
-    <description>Recent content in 架构设计 on cron-job 分布式任务调度平台</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    
-	  <atom:link href="http://localhost:1313/docs/arch/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-      
-        
-      
-    
-    
-    <item>
-      <title>执行器的设计</title>
-      <link>http://localhost:1313/docs/arch/executor-arch/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://localhost:1313/docs/arch/executor-arch/</guid>
-      <description>
-        
-        
-        &lt;h4&gt;一、概述&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;一概述&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%b8%80%e6%a6%82%e8%bf%b0&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;执行器SDK是整个分布式任务调度平台中，接收调度中心派发的任务请求，并执行任务的模块，使用方需要接入执行器SDK，实现任务执行的逻辑。它主要包含以下功能：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;接收调度中心派发的任务请求。&lt;/li&gt;
-&lt;li&gt;任务缓存到内存队列，并在指定时间执行任务。&lt;/li&gt;
-&lt;li&gt;OpenApi接口交互签名与验签。&lt;/li&gt;
-&lt;li&gt;上报任务的执行结果。&lt;/li&gt;
-&lt;li&gt;执行器心跳上报，每3秒一次心跳，表明执行器在线。&lt;/li&gt;
-&lt;li&gt;执行器与任务的自动注册，每30s自动注册一次。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4&gt;二、整体架构&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;二整体架构&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%ba%8c%e6%95%b4%e4%bd%93%e6%9e%b6%e6%9e%84&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;h5&gt;1. 模块架构&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;1-模块架构&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#1-%e6%a8%a1%e5%9d%97%e6%9e%b6%e6%9e%84&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;img alt=&#34;模块架构&#34; src=&#34;http://localhost:1313/images/module_arch.png&#34; style=&#34;margin-left: 0;&#34;&gt;
-&lt;h4&gt;三、核心模块设计&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;三核心模块设计&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%b8%89%e6%a0%b8%e5%bf%83%e6%a8%a1%e5%9d%97%e8%ae%be%e8%ae%a1&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;h5&gt;1. 提前调度&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;1-提前调度&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#1-%e6%8f%90%e5%89%8d%e8%b0%83%e5%ba%a6&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;p&gt;任务会提前3秒（可配置）被调度器派发到执行器，执行器接收到任务后，会将任务添加到延迟队列中，延迟队列会在任务的执行时间到达后，将任务派发到执行线程池中执行。
-这样设计的目的是为了提高任务执行的及时性，能够有效的规避因为网络延迟、调度延迟等各种原因导致任务执行时间滞后。&lt;/p&gt;
-&lt;h5&gt;2. 自动注册&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;2-自动注册&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#2-%e8%87%aa%e5%8a%a8%e6%b3%a8%e5%86%8c&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;p&gt;执行器启动时，会自动注册执行器和任务信息到调度器中，只需要在管理后台启动任务即可使用，不需要手动在管理后台配置信息。启动时会先注册执行器再注册任务信息，之后每30秒会自动注册一次，以确保信息的及时同步到调度器，其中已经存在的任务信息不会被覆盖，
-也就是说，管理后台中修改过的信息，自动注册机制不会去影响，它只在第一次有效。 执行器的自动注册依赖于三个方面的元数据信息：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;执行器的配置信息：
-&lt;ul&gt;
-&lt;li&gt;对于原生Java版本：需要手动通过代码配置。&lt;/li&gt;
-&lt;li&gt;对于SpringBoot版本：可以通过Spring的配置文件配置，也可以通过Bean来实例化对象&lt;code&gt;cn.horace.cronjob.executor.starter.config.ExecutorStarterConfig&lt;/code&gt;。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;预定义的任务对象：
-&lt;ul&gt;
-&lt;li&gt;对于原生Java版本：需要手动实例化对象，并设置到执行器的配置中。&lt;/li&gt;
-&lt;li&gt;对于SpringBoot版本：只需要将任务类交给Spring容器管理即可，不需要手动实例化对象。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;注解标识的任务信息：任务的配置信息由&lt;code&gt;cn.horace.cronjob.executor.annotation.TaskConfig&lt;/code&gt;注解来配置决定，它需要放在任务类上，使用时按需修改其中各项配置即可。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h5&gt;3. 线程池&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;3-线程池&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#3-%e7%ba%bf%e7%a8%8b%e6%b1%a0&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;p&gt;执行器中，总共有三个关键的线程池，分别是：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;调度线程池，核心线程数为3个，用在3秒一次的心跳和30秒一次的自动注册。&lt;/li&gt;
-&lt;li&gt;执行线程池，用于执行实际的任务，核心线程数为5个，最大80个，空闲5分钟后销毁。&lt;/li&gt;
-&lt;li&gt;结果上报线程池，用于上报任务结果，核心线程数为5个，最大80个，空闲5分钟后销毁。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;执行线程池和结果上报线程池分开的目的是为了避免相互影响，而且控制了核心线程数，开销并不大。另一个值得一提的是任务的派发，这里是固定一个线程永不停歇的从延迟队列获取任务，如果没有任务，那么线程会阻塞，直到有任务到达或者超时，直到下一轮，
-这里不需要线程池的原因是一个线程就能满足，拿到任务后就会派发给执行线程执行，所以它的开销很小。&lt;/p&gt;
-&lt;h5&gt;4. 优雅下线&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;4-优雅下线&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#4-%e4%bc%98%e9%9b%85%e4%b8%8b%e7%ba%bf&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;p&gt;优雅下线的设计目的是为了执行器关闭时可以做好收尾工作，规避因关闭、重启导致数据丢失和不一致性的问题。简单来说，在执行器关闭时，会有以下的行为：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;向调度器发送下线请求。&lt;/li&gt;
-&lt;li&gt;停止接收任务的派发&lt;/li&gt;
-&lt;li&gt;停止心跳。&lt;/li&gt;
-&lt;li&gt;停止自动注册。&lt;/li&gt;
-&lt;li&gt;等待现有任务执行完毕。&lt;/li&gt;
-&lt;li&gt;等待结果上报线程池中的任务执行完毕。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;为了达到上述的效果，避免收到关闭命令时，网络通道等相关资源已关闭，执行器SDK修改了&lt;code&gt;ShutdownHook&lt;/code&gt;的默认行为，优雅下线的动作会先于系统默认的hook执行，因此确保关闭前所依赖的资源可用。细节可查看源码&lt;code&gt;cn.horace.cronjob.commons.utils.shutdown.ShutdownHookManager&lt;/code&gt;。&lt;/p&gt;
-&lt;h5&gt;5. 定期心跳&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;5-定期心跳&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#5-%e5%ae%9a%e6%9c%9f%e5%bf%83%e8%b7%b3&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;p&gt;定期心跳的目的是为了能够上报执行器的状态，以便于调度器能够及时的感知到执行器的存在，从而能够及时的进行任务的调度。如果执行器超过30秒没有心跳，则会置为下线状态，不会再派发任务。另外结合优雅关闭，执行器关闭时，会主动下线自己，以便调度器及时感知。&lt;/p&gt;
-&lt;h5&gt;6. 安全性设计&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;6-安全性设计&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#6-%e5%ae%89%e5%85%a8%e6%80%a7%e8%ae%be%e8%ae%a1&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;p&gt;执行器与调度器之间的交互接口，均采用签名校验的方式，以保证数据的安全性。签名秘钥由调度器的配置决定，执行器需要保持一致。接入方在接入时，可以按需自定义，以免和大众一样，签名验证算法简要概括如下：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;发送端将待签名参数按照参数名称的字典序排序。&lt;/li&gt;
-&lt;li&gt;将排序后的参数按照key=value的格式拼接成一个字符串。&lt;/li&gt;
-&lt;li&gt;将拼接后的字符串和秘钥进行MD5加密。&lt;/li&gt;
-&lt;li&gt;将加密后的MD5值作为签名参数，添加到请求参数中。&lt;/li&gt;
-&lt;li&gt;接收端将请求参数中的签名参数取出，按照相同的算法进行签名。&lt;/li&gt;
-&lt;li&gt;将签名后的MD5值与请求参数中的签名参数进行比较，如果一致，则认为请求是合法的。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;详情可查阅签名工具类&lt;code&gt;cn.horace.cronjob.commons.utils.SignUtils&lt;/code&gt;。&lt;/p&gt;
-
-      </description>
-    </item>
-    
-    <item>
-      <title>调度器的设计</title>
-      <link>http://localhost:1313/docs/arch/scheduler-arch/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://localhost:1313/docs/arch/scheduler-arch/</guid>
-      <description>
-        
-        
-        &lt;h4&gt;一、概述&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;一概述&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%b8%80%e6%a6%82%e8%bf%b0&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;调度器是系统中负责任务调度的服务，它根据任务的配置信息，在指定的时间点派发任务给执行器，它负责管理和调度系统中的所有任务。&lt;/p&gt;
-&lt;h4&gt;二、整体架构&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;二整体架构&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%ba%8c%e6%95%b4%e4%bd%93%e6%9e%b6%e6%9e%84&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;h5&gt;1. 模块架构&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;1-模块架构&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#1-%e6%a8%a1%e5%9d%97%e6%9e%b6%e6%9e%84&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;img alt=&#34;模块架构&#34; src=&#34;http://localhost:1313/images/module_arch.png&#34; style=&#34;margin-left: 0;&#34;&gt;
-&lt;h5&gt;2. 部署架构&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;2-部署架构&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#2-%e9%83%a8%e7%bd%b2%e6%9e%b6%e6%9e%84&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;img alt=&#34;模块架构&#34; src=&#34;http://localhost:1313/images/deploy_arch.png&#34; style=&#34;margin-left: 0;&#34;&gt;
-&lt;h5&gt;3. 调度器的依赖&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;3-调度器的依赖&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#3-%e8%b0%83%e5%ba%a6%e5%99%a8%e7%9a%84%e4%be%9d%e8%b5%96&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;p&gt;调度器仅依赖于MySQL数据库，除此之外不依赖于任何第三方服务，部署成本低。&lt;/p&gt;
-&lt;h4&gt;三、核心模块设计&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;三核心模块设计&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%b8%89%e6%a0%b8%e5%bf%83%e6%a8%a1%e5%9d%97%e8%ae%be%e8%ae%a1&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;h5&gt;1. 多租户的设计&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;1-多租户的设计&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#1-%e5%a4%9a%e7%a7%9f%e6%88%b7%e7%9a%84%e8%ae%be%e8%ae%a1&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;ul&gt;
-&lt;li&gt;多租户的设计目的是为了实现多个业务线共享一套调度系统，每个业务线可以独立配置租户的资源和权限，实现资源的隔离和权限的控制。执行器在注册时，需要携带租户标识以标明自己所属的租户，后续可在管理平台做权限的管控。&lt;/li&gt;
-&lt;li&gt;对于含有多区域业务系统的企业，例如国内多条业务线、海外多条业务线，建议每个区域部署一套独立的调度平台，因为跨区、跨州的网络通信不确定性较大。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h5&gt;2. 调度器的管理&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;2-调度器的管理&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#2-%e8%b0%83%e5%ba%a6%e5%99%a8%e7%9a%84%e7%ae%a1%e7%90%86&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;ul&gt;
-&lt;li&gt;调度器支持集群的部署，保障高可用的同时，还实现了负载均衡的效果，当调度任务量大、应用规模大的时候，建议多几个节点。为了保证最小高可用，建议至少部署2个节点。&lt;/li&gt;
-&lt;li&gt;多节点部署时需要修改服务ID，在配置文件&lt;code&gt;application.properties&lt;/code&gt;中配置&lt;code&gt;server.id&lt;/code&gt;，需要确保每个节点ID是唯一的，另外需要检查&lt;code&gt;server.port&lt;/code&gt;是否被占用，如果你把多个节点部署到同一台机器的话。但不建议这么做，因为这达不到高可用的目的。&lt;/li&gt;
-&lt;li&gt;调度器启动时会有3秒一次的心跳，用于标识自己在线，如果超过10秒没有心跳，则判定为下线，集群的调度器列表可以在管理平台上查看。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h5&gt;3. 执行器的管理&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;3-执行器的管理&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#3-%e6%89%a7%e8%a1%8c%e5%99%a8%e7%9a%84%e7%ae%a1%e7%90%86&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;ul&gt;
-&lt;li&gt;执行器启动时，会向调度器注册自己的信息，包括执行器的IP、端口、名称、标签、执行器的描述等元数据信息，启动后会保持3秒一次的心跳，并且每30秒会注册一次执行器元数据信息。&lt;/li&gt;
-&lt;li&gt;执行器的关闭前，会向调度器发送下线请求，下线成功后，执行器会从调度器的列表中移除，任务不会再派发给这个执行器。同时调度器会每3秒检测一次执行器的状态，如果超过10秒没有心跳，则判定为下线。&lt;/li&gt;
-&lt;li&gt;临界条件下，如果调度器派发任务给正在关闭的执行器，那么执行器会响应一个已下线的错误码，调度器会将此执行器置为下线状态，同时会重新派发任务给其他执行器。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h5&gt;4. 任务的管理&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;4-任务的管理&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#4-%e4%bb%bb%e5%8a%a1%e7%9a%84%e7%ae%a1%e7%90%86&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;ul&gt;
-&lt;li&gt;执行器启动时，会向调度器全量注册自己的任务信息，任务的注册机制与执行器的逻辑保持一致，启动后会保持3秒一次的心跳，并且每30秒会注册一次执行器元数据信息。&lt;/li&gt;
-&lt;li&gt;当某个任务下线时，执行器会以特定的错误码通知调度器，调度器会将此任务置为停止状态，后续将不再派发该任务给执行器，表示该任务已不再使用。&lt;/li&gt;
-&lt;li&gt;当新的迭代新增任务时，上线后可在管理平台看到任务的详细信息，但此时还未启动，需要手动启动任务，才会开始任务的调度，启动前需要确保所有的执行器都已经部署完成，避免调度时误把任务下线。&lt;/li&gt;
-&lt;li&gt;任务的注册会以租户ID、应用ID和任务类方法全限定名作为唯一标识，已经存在的任务不会被覆盖，以确保注册后可以在管理平台随意修改任务的配置信息。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h5&gt;5. 通信的设计&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;5-通信的设计&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#5-%e9%80%9a%e4%bf%a1%e7%9a%84%e8%ae%be%e8%ae%a1&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;ul&gt;
-&lt;li&gt;调度器与执行器之间的通信采用HTTP协议，执行器内部会启动一个基于Jetty的内嵌式Web服务，调度器也会基于Web服务开放OpenAPI接口，供执行器交互。&lt;/li&gt;
-&lt;li&gt;与长连接协议不同的是，此类场景下，HTTP协议会更加简单，实现起来也更加容易，未来支持多执行器SDK客户端时，更加简便。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h5&gt;6. 任务调度的设计&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;6-任务调度的设计&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#6-%e4%bb%bb%e5%8a%a1%e8%b0%83%e5%ba%a6%e7%9a%84%e8%ae%be%e8%ae%a1&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;h6&gt;6.1 锁的设计&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;61-锁的设计&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#61-%e9%94%81%e7%9a%84%e8%ae%be%e8%ae%a1&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h6&gt;&lt;ul&gt;
-&lt;li&gt;在一些锁竞争不大也不频繁的场景下，为了减少对第三方系统的依赖，系统内的分布式锁采用了MySQL来实现，主要用在定期统计数据、定期生成任务日志等场景。&lt;/li&gt;
-&lt;li&gt;其余一些互斥的场景则使用版本号的方式实现乐观锁，尽可能避免行锁。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h6&gt;6.2 预先生成任务日志&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;62-预先生成任务日志&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#62-%e9%a2%84%e5%85%88%e7%94%9f%e6%88%90%e4%bb%bb%e5%8a%a1%e6%97%a5%e5%bf%97&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h6&gt;&lt;p&gt;任务日志是任务调度的最小粒度，一个任务每一次调度都会生成一条任务日志，它会根据任务的配置信息，预先生成好未来执行的任务日志，以便于节省调度时间。任务日志的生成步骤大致如下：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;每5秒钟就检查一次是否需要生成任务日志，符合生成条件时则继续生成。&lt;/li&gt;
-&lt;li&gt;先获得分布式锁，以确保集群环境下只有一个节点在生成任务日志。&lt;/li&gt;
-&lt;li&gt;批量获取启动状态的任务，并交给线程池生成任务日志。&lt;/li&gt;
-&lt;li&gt;生成任务日志时，会预先生成3分钟内将要执行的任务，可以通过&lt;code&gt;schedulers.taskPreGenerationMaxTimeMinutes&lt;/code&gt;修改配置，如果不是特别理解内部机制，建议不做修改。&lt;/li&gt;
-&lt;li&gt;生成好的任务日志，会处于初始化的状态，等待执行器获取到内存的调度队列中。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h6&gt;6.4 任务日志的状态&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;64-任务日志的状态&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#64-%e4%bb%bb%e5%8a%a1%e6%97%a5%e5%bf%97%e7%9a%84%e7%8a%b6%e6%80%81&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h6&gt;&lt;ul&gt;
-&lt;li&gt;初始化：任务日志创建成功，等待调度器派发。&lt;/li&gt;
-&lt;li&gt;队列中：任务日志已被调度器放入内存队列，等待调度器派发给执行器执行。&lt;/li&gt;
-&lt;li&gt;调度中：任务日志已被调度器派发给执行器，等待执行器执行的结果。&lt;/li&gt;
-&lt;li&gt;执行成功：任务执行成功，任务日志已被执行器返回。&lt;/li&gt;
-&lt;li&gt;执行失败：任务执行失败，可在详情中查看详细原因。&lt;/li&gt;
-&lt;li&gt;取消执行：一般是调度前修改了任务详情，或者停止了应用，则会被取消。&lt;/li&gt;
-&lt;li&gt;任务过期：任务已经超过了调度时间，并且过期策略是丢弃，表示任务日志已被丢弃。&lt;/li&gt;
-&lt;li&gt;执行失败，已丢弃：任务执行失败，并且失败策略是丢弃，表示任务日志已被丢弃。&lt;/li&gt;
-&lt;li&gt;执行失败，重试中：表示上一次任务执行失败，正在重试中。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h6&gt;6.4 内存调度队列&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;64-内存调度队列&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#64-%e5%86%85%e5%ad%98%e8%b0%83%e5%ba%a6%e9%98%9f%e5%88%97&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h6&gt;&lt;ul&gt;
-&lt;li&gt;调度器每5秒钟会从数据库获取&lt;code&gt;初始化&lt;/code&gt;和&lt;code&gt;失败重试&lt;/code&gt;状态的任务日志放到内存队列中，它是一个优先队列，队列的元素会按照执行时间从近到远排序，以便于任务日志的获取。&lt;/li&gt;
-&lt;li&gt;内存队列的最大容量通过&lt;code&gt;schedulers.taskQueueCount&lt;/code&gt;控制，避免单实例内存队列过大，影响系统的整体性能和稳定性。&lt;/li&gt;
-&lt;li&gt;获取到任务日志后，会通过乐观锁的方式，将任务状态变更为&lt;code&gt;队列中&lt;/code&gt;的状态，并等待任务到时间被调度。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h6&gt;6.5 任务的调度&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;65-任务的调度&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#65-%e4%bb%bb%e5%8a%a1%e7%9a%84%e8%b0%83%e5%ba%a6&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h6&gt;&lt;ul&gt;
-&lt;li&gt;调度器启动后，会固定一个线程不停地从内存队列获取待执行的任务日志，并检查是否达到了提前调度的条件，默认是提前3秒钟调度，可以通过&lt;code&gt;schedulers.beforeInterval&lt;/code&gt;配置修改，默认情况下不建议修改。&lt;/li&gt;
-&lt;li&gt;当任务日志达到提前调度条件后，会将任务日志的状态变更为&lt;code&gt;调度中&lt;/code&gt;的状态，并将任务日志提交到调度线程池，调度线程池会根据任务的预设策略派发给执行器执行。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h6&gt;6.6 调度策略&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;66-调度策略&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#66-%e8%b0%83%e5%ba%a6%e7%ad%96%e7%95%a5&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h6&gt;&lt;p&gt;在任务将要派发给执行器执行时，根据预设策略会有不同的调度行为，目前支持以下几种策略：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;随机策略：从当前在线的执行器中随机选择一个执行器，如果没有在线的执行器，则会进入失败策略的处理中。&lt;/li&gt;
-&lt;li&gt;分片策略：获取所有在线的执行器，每个执行器都会派发任务，并且携带分片参数（page和total），以便于使用方做大任务的分片处理。
-选定好调度策略之后，会通过通过HTTP协议调用执行器暴露的WEB服务接口，将任务派发给执行器执行。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h6&gt;6.7 失败策略&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;67-失败策略&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#67-%e5%a4%b1%e8%b4%a5%e7%ad%96%e7%95%a5&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h6&gt;&lt;p&gt;不管因何种原因导致的调度失败，都会进入失败策略的处理中，失败策略的处理会根据预设的策略进行处理，失败的原因可以通过管理平台的任务日志详情看，目前支持以下几种策略：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;失败后丢弃：任务执行失败，任务日志会被丢弃。&lt;/li&gt;
-&lt;li&gt;失败后重试：任务执行失败，任务日志会被重新放入内存队列，等待下次调度。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;在失败重试的场景下，可以配置最大的重试次数，默认是5次，超过最大重试次数后，任务日志会被丢弃，并记录信息。&lt;/p&gt;
-&lt;h5&gt;7. 数据的清理&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;7-数据的清理&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#7-%e6%95%b0%e6%8d%ae%e7%9a%84%e6%b8%85%e7%90%86&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;p&gt;下线的执行器、任务的调度日志、统计的数据等，为了避免系统内数据一直无限增长，需要定期清理这些数据，避免系统内数据量过大，影响系统的性能。数据的保留时间可以通过&lt;code&gt;data.maxRetainDays&lt;/code&gt;修改，默认保存5天。&lt;/p&gt;
-&lt;h5&gt;8. 安全性的设计&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;8-安全性的设计&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#8-%e5%ae%89%e5%85%a8%e6%80%a7%e7%9a%84%e8%ae%be%e8%ae%a1&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;p&gt;执行器与调度器之间的交互接口，均采用签名校验的方式，以保证数据的安全性。签名秘钥由调度器的配置决定，执行器需要保持一致。接入方在接入时，可以按需自定义，以免和大众一样，签名验证算法简要概括如下：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;发送端将待签名参数按照参数名称的字典序排序。&lt;/li&gt;
-&lt;li&gt;将排序后的参数按照key=value的格式拼接成一个字符串。&lt;/li&gt;
-&lt;li&gt;将拼接后的字符串和秘钥进行MD5加密。&lt;/li&gt;
-&lt;li&gt;将加密后的MD5值作为签名参数，添加到请求参数中。&lt;/li&gt;
-&lt;li&gt;接收端将请求参数中的签名参数取出，按照相同的算法进行签名。&lt;/li&gt;
-&lt;li&gt;将签名后的MD5值与请求参数中的签名参数进行比较，如果一致，则认为请求是合法的。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;另外，调度器会管理两套签名秘钥，一套用于管理后台的UI交互，一套用于执行器的SDK交互，以保证安全性。如果要修改管理后台的UI秘钥，则需要自行构建一下。&lt;/p&gt;
-&lt;h5&gt;9. 权限的设计&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;9-权限的设计&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#9-%e6%9d%83%e9%99%90%e7%9a%84%e8%ae%be%e8%ae%a1&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;p&gt;权限支持两种维度，一种是租户级别的权限，一种是接口级别的权限，可以满足业务线权限隔离的需求，接口级别的权限，可以满足某些用户只能查看，不能编辑任务的需求，使用时可以按需开不同的权限。&lt;/p&gt;
-&lt;h5&gt;10. 调度器的优雅关闭&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;10-调度器的优雅关闭&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#10-%e8%b0%83%e5%ba%a6%e5%99%a8%e7%9a%84%e4%bc%98%e9%9b%85%e5%85%b3%e9%97%ad&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;p&gt;优雅关闭的设计目的是为了调度器关闭时可以做好收尾工作，规避因关闭、重启导致数据丢失和不一致性的问题。简单来说，在调度器关闭时，会有以下的行为：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;停止生成新的任务日志。&lt;/li&gt;
-&lt;li&gt;停止获取任务日志到内存队列。&lt;/li&gt;
-&lt;li&gt;等待所有的任务日志派发完成。&lt;/li&gt;
-&lt;li&gt;停止调度器的心跳，优雅的关闭各个线程池，等待线程池中的任务执行完成。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;为了达到上述的效果，避免收到关闭命令时，网络通道、数据库连接等相关资源已关闭，调度器修改了&lt;code&gt;ShutdownHook&lt;/code&gt;的默认行为，优雅下线的动作会先于系统默认的hook执行，因此确保关闭前所依赖的资源可用。细节可查看源码&lt;code&gt;cn.horace.cronjob.commons.utils.shutdown.ShutdownHookManager&lt;/code&gt;。&lt;/p&gt;
-
-      </description>
-    </item>
-    
-  </channel>
-</rss>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>cron-job 分布式任务调度平台 – 架构设计</title><link>https://example.org/docs/arch/</link><description>Recent content in 架构设计 on cron-job 分布式任务调度平台</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><atom:link href="https://example.org/docs/arch/index.xml" rel="self" type="application/rss+xml"/><item><title>执行器的设计</title><link>https://example.org/docs/arch/executor-arch/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/arch/executor-arch/</guid><description>
+&lt;h4>一、概述&lt;span class="hx-absolute -hx-mt-20" id="一概述">&lt;/span>
+&lt;a href="#%e4%b8%80%e6%a6%82%e8%bf%b0" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>执行器SDK是整个分布式任务调度平台中，接收调度中心派发的任务请求，并执行任务的模块，使用方需要接入执行器SDK，实现任务执行的逻辑。它主要包含以下功能：&lt;/p>
+&lt;ul>
+&lt;li>接收调度中心派发的任务请求。&lt;/li>
+&lt;li>任务缓存到内存队列，并在指定时间执行任务。&lt;/li>
+&lt;li>OpenApi接口交互签名与验签。&lt;/li>
+&lt;li>上报任务的执行结果。&lt;/li>
+&lt;li>执行器心跳上报，每3秒一次心跳，表明执行器在线。&lt;/li>
+&lt;li>执行器与任务的自动注册，每30s自动注册一次。&lt;/li>
+&lt;/ul>
+&lt;h4>二、整体架构&lt;span class="hx-absolute -hx-mt-20" id="二整体架构">&lt;/span>
+&lt;a href="#%e4%ba%8c%e6%95%b4%e4%bd%93%e6%9e%b6%e6%9e%84" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;h5>1. 模块架构&lt;span class="hx-absolute -hx-mt-20" id="1-模块架构">&lt;/span>
+&lt;a href="#1-%e6%a8%a1%e5%9d%97%e6%9e%b6%e6%9e%84" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;img alt="模块架构" src="https://example.org/images/module_arch.png" style="margin-left: 0;">
+&lt;h4>三、核心模块设计&lt;span class="hx-absolute -hx-mt-20" id="三核心模块设计">&lt;/span>
+&lt;a href="#%e4%b8%89%e6%a0%b8%e5%bf%83%e6%a8%a1%e5%9d%97%e8%ae%be%e8%ae%a1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;h5>1. 提前调度&lt;span class="hx-absolute -hx-mt-20" id="1-提前调度">&lt;/span>
+&lt;a href="#1-%e6%8f%90%e5%89%8d%e8%b0%83%e5%ba%a6" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>任务会提前3秒（可配置）被调度器派发到执行器，执行器接收到任务后，会将任务添加到延迟队列中，延迟队列会在任务的执行时间到达后，将任务派发到执行线程池中执行。
+这样设计的目的是为了提高任务执行的及时性，能够有效的规避因为网络延迟、调度延迟等各种原因导致任务执行时间滞后。&lt;/p>
+&lt;h5>2. 自动注册&lt;span class="hx-absolute -hx-mt-20" id="2-自动注册">&lt;/span>
+&lt;a href="#2-%e8%87%aa%e5%8a%a8%e6%b3%a8%e5%86%8c" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>执行器启动时，会自动注册执行器和任务信息到调度器中，只需要在管理后台启动任务即可使用，不需要手动在管理后台配置信息。启动时会先注册执行器再注册任务信息，之后每30秒会自动注册一次，以确保信息的及时同步到调度器，其中已经存在的任务信息不会被覆盖，
+也就是说，管理后台中修改过的信息，自动注册机制不会去影响，它只在第一次有效。 执行器的自动注册依赖于三个方面的元数据信息：&lt;/p>
+&lt;ul>
+&lt;li>执行器的配置信息：
+&lt;ul>
+&lt;li>对于原生Java版本：需要手动通过代码配置。&lt;/li>
+&lt;li>对于SpringBoot版本：可以通过Spring的配置文件配置，也可以通过Bean来实例化对象&lt;code>cn.horace.cronjob.executor.starter.config.ExecutorStarterConfig&lt;/code>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>预定义的任务对象：
+&lt;ul>
+&lt;li>对于原生Java版本：需要手动实例化对象，并设置到执行器的配置中。&lt;/li>
+&lt;li>对于SpringBoot版本：只需要将任务类交给Spring容器管理即可，不需要手动实例化对象。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>注解标识的任务信息：任务的配置信息由&lt;code>cn.horace.cronjob.executor.annotation.TaskConfig&lt;/code>注解来配置决定，它需要放在任务类上，使用时按需修改其中各项配置即可。&lt;/li>
+&lt;/ul>
+&lt;h5>3. 线程池&lt;span class="hx-absolute -hx-mt-20" id="3-线程池">&lt;/span>
+&lt;a href="#3-%e7%ba%bf%e7%a8%8b%e6%b1%a0" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>执行器中，总共有三个关键的线程池，分别是：&lt;/p>
+&lt;ul>
+&lt;li>调度线程池，核心线程数为3个，用在3秒一次的心跳和30秒一次的自动注册。&lt;/li>
+&lt;li>执行线程池，用于执行实际的任务，核心线程数为5个，最大80个，空闲5分钟后销毁。&lt;/li>
+&lt;li>结果上报线程池，用于上报任务结果，核心线程数为5个，最大80个，空闲5分钟后销毁。&lt;/li>
+&lt;/ul>
+&lt;p>执行线程池和结果上报线程池分开的目的是为了避免相互影响，而且控制了核心线程数，开销并不大。另一个值得一提的是任务的派发，这里是固定一个线程永不停歇的从延迟队列获取任务，如果没有任务，那么线程会阻塞，直到有任务到达或者超时，直到下一轮，
+这里不需要线程池的原因是一个线程就能满足，拿到任务后就会派发给执行线程执行，所以它的开销很小。&lt;/p>
+&lt;h5>4. 优雅下线&lt;span class="hx-absolute -hx-mt-20" id="4-优雅下线">&lt;/span>
+&lt;a href="#4-%e4%bc%98%e9%9b%85%e4%b8%8b%e7%ba%bf" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>优雅下线的设计目的是为了执行器关闭时可以做好收尾工作，规避因关闭、重启导致数据丢失和不一致性的问题。简单来说，在执行器关闭时，会有以下的行为：&lt;/p>
+&lt;ul>
+&lt;li>向调度器发送下线请求。&lt;/li>
+&lt;li>停止接收任务的派发&lt;/li>
+&lt;li>停止心跳。&lt;/li>
+&lt;li>停止自动注册。&lt;/li>
+&lt;li>等待现有任务执行完毕。&lt;/li>
+&lt;li>等待结果上报线程池中的任务执行完毕。&lt;/li>
+&lt;/ul>
+&lt;p>为了达到上述的效果，避免收到关闭命令时，网络通道等相关资源已关闭，执行器SDK修改了&lt;code>ShutdownHook&lt;/code>的默认行为，优雅下线的动作会先于系统默认的hook执行，因此确保关闭前所依赖的资源可用。细节可查看源码&lt;code>cn.horace.cronjob.commons.utils.shutdown.ShutdownHookManager&lt;/code>。&lt;/p>
+&lt;h5>5. 定期心跳&lt;span class="hx-absolute -hx-mt-20" id="5-定期心跳">&lt;/span>
+&lt;a href="#5-%e5%ae%9a%e6%9c%9f%e5%bf%83%e8%b7%b3" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>定期心跳的目的是为了能够上报执行器的状态，以便于调度器能够及时的感知到执行器的存在，从而能够及时的进行任务的调度。如果执行器超过30秒没有心跳，则会置为下线状态，不会再派发任务。另外结合优雅关闭，执行器关闭时，会主动下线自己，以便调度器及时感知。&lt;/p>
+&lt;h5>6. 安全性设计&lt;span class="hx-absolute -hx-mt-20" id="6-安全性设计">&lt;/span>
+&lt;a href="#6-%e5%ae%89%e5%85%a8%e6%80%a7%e8%ae%be%e8%ae%a1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>执行器与调度器之间的交互接口，均采用签名校验的方式，以保证数据的安全性。签名秘钥由调度器的配置决定，执行器需要保持一致。接入方在接入时，可以按需自定义，以免和大众一样，签名验证算法简要概括如下：&lt;/p>
+&lt;ul>
+&lt;li>发送端将待签名参数按照参数名称的字典序排序。&lt;/li>
+&lt;li>将排序后的参数按照key=value的格式拼接成一个字符串。&lt;/li>
+&lt;li>将拼接后的字符串和秘钥进行MD5加密。&lt;/li>
+&lt;li>将加密后的MD5值作为签名参数，添加到请求参数中。&lt;/li>
+&lt;li>接收端将请求参数中的签名参数取出，按照相同的算法进行签名。&lt;/li>
+&lt;li>将签名后的MD5值与请求参数中的签名参数进行比较，如果一致，则认为请求是合法的。&lt;/li>
+&lt;/ul>
+&lt;p>详情可查阅签名工具类&lt;code>cn.horace.cronjob.commons.utils.SignUtils&lt;/code>。&lt;/p></description></item><item><title>调度器的设计</title><link>https://example.org/docs/arch/scheduler-arch/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/arch/scheduler-arch/</guid><description>
+&lt;h4>一、概述&lt;span class="hx-absolute -hx-mt-20" id="一概述">&lt;/span>
+&lt;a href="#%e4%b8%80%e6%a6%82%e8%bf%b0" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>调度器是系统中负责任务调度的服务，它根据任务的配置信息，在指定的时间点派发任务给执行器，它负责管理和调度系统中的所有任务。&lt;/p>
+&lt;h4>二、整体架构&lt;span class="hx-absolute -hx-mt-20" id="二整体架构">&lt;/span>
+&lt;a href="#%e4%ba%8c%e6%95%b4%e4%bd%93%e6%9e%b6%e6%9e%84" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;h5>1. 模块架构&lt;span class="hx-absolute -hx-mt-20" id="1-模块架构">&lt;/span>
+&lt;a href="#1-%e6%a8%a1%e5%9d%97%e6%9e%b6%e6%9e%84" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;img alt="模块架构" src="https://example.org/images/module_arch.png" style="margin-left: 0;">
+&lt;h5>2. 部署架构&lt;span class="hx-absolute -hx-mt-20" id="2-部署架构">&lt;/span>
+&lt;a href="#2-%e9%83%a8%e7%bd%b2%e6%9e%b6%e6%9e%84" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;img alt="模块架构" src="https://example.org/images/deploy_arch.png" style="margin-left: 0;">
+&lt;h5>3. 调度器的依赖&lt;span class="hx-absolute -hx-mt-20" id="3-调度器的依赖">&lt;/span>
+&lt;a href="#3-%e8%b0%83%e5%ba%a6%e5%99%a8%e7%9a%84%e4%be%9d%e8%b5%96" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>调度器仅依赖于MySQL数据库，除此之外不依赖于任何第三方服务，部署成本低。&lt;/p>
+&lt;h4>三、核心模块设计&lt;span class="hx-absolute -hx-mt-20" id="三核心模块设计">&lt;/span>
+&lt;a href="#%e4%b8%89%e6%a0%b8%e5%bf%83%e6%a8%a1%e5%9d%97%e8%ae%be%e8%ae%a1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;h5>1. 多租户的设计&lt;span class="hx-absolute -hx-mt-20" id="1-多租户的设计">&lt;/span>
+&lt;a href="#1-%e5%a4%9a%e7%a7%9f%e6%88%b7%e7%9a%84%e8%ae%be%e8%ae%a1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
+&lt;li>多租户的设计目的是为了实现多个业务线共享一套调度系统，每个业务线可以独立配置租户的资源和权限，实现资源的隔离和权限的控制。执行器在注册时，需要携带租户标识以标明自己所属的租户，后续可在管理平台做权限的管控。&lt;/li>
+&lt;li>对于含有多区域业务系统的企业，例如国内多条业务线、海外多条业务线，建议每个区域部署一套独立的调度平台，因为跨区、跨州的网络通信不确定性较大。&lt;/li>
+&lt;/ul>
+&lt;h5>2. 调度器的管理&lt;span class="hx-absolute -hx-mt-20" id="2-调度器的管理">&lt;/span>
+&lt;a href="#2-%e8%b0%83%e5%ba%a6%e5%99%a8%e7%9a%84%e7%ae%a1%e7%90%86" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
+&lt;li>调度器支持集群的部署，保障高可用的同时，还实现了负载均衡的效果，当调度任务量大、应用规模大的时候，建议多几个节点。为了保证最小高可用，建议至少部署2个节点。&lt;/li>
+&lt;li>多节点部署时需要修改服务ID，在配置文件&lt;code>application.properties&lt;/code>中配置&lt;code>server.id&lt;/code>，需要确保每个节点ID是唯一的，另外需要检查&lt;code>server.port&lt;/code>是否被占用，如果你把多个节点部署到同一台机器的话。但不建议这么做，因为这达不到高可用的目的。&lt;/li>
+&lt;li>调度器启动时会有3秒一次的心跳，用于标识自己在线，如果超过10秒没有心跳，则判定为下线，集群的调度器列表可以在管理平台上查看。&lt;/li>
+&lt;/ul>
+&lt;h5>3. 执行器的管理&lt;span class="hx-absolute -hx-mt-20" id="3-执行器的管理">&lt;/span>
+&lt;a href="#3-%e6%89%a7%e8%a1%8c%e5%99%a8%e7%9a%84%e7%ae%a1%e7%90%86" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
+&lt;li>执行器启动时，会向调度器注册自己的信息，包括执行器的IP、端口、名称、标签、执行器的描述等元数据信息，启动后会保持3秒一次的心跳，并且每30秒会注册一次执行器元数据信息。&lt;/li>
+&lt;li>执行器的关闭前，会向调度器发送下线请求，下线成功后，执行器会从调度器的列表中移除，任务不会再派发给这个执行器。同时调度器会每3秒检测一次执行器的状态，如果超过10秒没有心跳，则判定为下线。&lt;/li>
+&lt;li>临界条件下，如果调度器派发任务给正在关闭的执行器，那么执行器会响应一个已下线的错误码，调度器会将此执行器置为下线状态，同时会重新派发任务给其他执行器。&lt;/li>
+&lt;/ul>
+&lt;h5>4. 任务的管理&lt;span class="hx-absolute -hx-mt-20" id="4-任务的管理">&lt;/span>
+&lt;a href="#4-%e4%bb%bb%e5%8a%a1%e7%9a%84%e7%ae%a1%e7%90%86" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
+&lt;li>执行器启动时，会向调度器全量注册自己的任务信息，任务的注册机制与执行器的逻辑保持一致，启动后会保持3秒一次的心跳，并且每30秒会注册一次执行器元数据信息。&lt;/li>
+&lt;li>当某个任务下线时，执行器会以特定的错误码通知调度器，调度器会将此任务置为停止状态，后续将不再派发该任务给执行器，表示该任务已不再使用。&lt;/li>
+&lt;li>当新的迭代新增任务时，上线后可在管理平台看到任务的详细信息，但此时还未启动，需要手动启动任务，才会开始任务的调度，启动前需要确保所有的执行器都已经部署完成，避免调度时误把任务下线。&lt;/li>
+&lt;li>任务的注册会以租户ID、应用ID和任务类方法全限定名作为唯一标识，已经存在的任务不会被覆盖，以确保注册后可以在管理平台随意修改任务的配置信息。&lt;/li>
+&lt;/ul>
+&lt;h5>5. 通信的设计&lt;span class="hx-absolute -hx-mt-20" id="5-通信的设计">&lt;/span>
+&lt;a href="#5-%e9%80%9a%e4%bf%a1%e7%9a%84%e8%ae%be%e8%ae%a1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
+&lt;li>调度器与执行器之间的通信采用HTTP协议，执行器内部会启动一个基于Jetty的内嵌式Web服务，调度器也会基于Web服务开放OpenAPI接口，供执行器交互。&lt;/li>
+&lt;li>与长连接协议不同的是，此类场景下，HTTP协议会更加简单，实现起来也更加容易，未来支持多执行器SDK客户端时，更加简便。&lt;/li>
+&lt;/ul>
+&lt;h5>6. 任务调度的设计&lt;span class="hx-absolute -hx-mt-20" id="6-任务调度的设计">&lt;/span>
+&lt;a href="#6-%e4%bb%bb%e5%8a%a1%e8%b0%83%e5%ba%a6%e7%9a%84%e8%ae%be%e8%ae%a1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>6.1 锁的设计&lt;span class="hx-absolute -hx-mt-20" id="61-锁的设计">&lt;/span>
+&lt;a href="#61-%e9%94%81%e7%9a%84%e8%ae%be%e8%ae%a1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;li>在一些锁竞争不大也不频繁的场景下，为了减少对第三方系统的依赖，系统内的分布式锁采用了MySQL来实现，主要用在定期统计数据、定期生成任务日志等场景。&lt;/li>
+&lt;li>其余一些互斥的场景则使用版本号的方式实现乐观锁，尽可能避免行锁。&lt;/li>
+&lt;/ul>
+&lt;h6>6.2 预先生成任务日志&lt;span class="hx-absolute -hx-mt-20" id="62-预先生成任务日志">&lt;/span>
+&lt;a href="#62-%e9%a2%84%e5%85%88%e7%94%9f%e6%88%90%e4%bb%bb%e5%8a%a1%e6%97%a5%e5%bf%97" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;p>任务日志是任务调度的最小粒度，一个任务每一次调度都会生成一条任务日志，它会根据任务的配置信息，预先生成好未来执行的任务日志，以便于节省调度时间。任务日志的生成步骤大致如下：&lt;/p>
+&lt;ul>
+&lt;li>每5秒钟就检查一次是否需要生成任务日志，符合生成条件时则继续生成。&lt;/li>
+&lt;li>先获得分布式锁，以确保集群环境下只有一个节点在生成任务日志。&lt;/li>
+&lt;li>批量获取启动状态的任务，并交给线程池生成任务日志。&lt;/li>
+&lt;li>生成任务日志时，会预先生成3分钟内将要执行的任务，可以通过&lt;code>schedulers.taskPreGenerationMaxTimeMinutes&lt;/code>修改配置，如果不是特别理解内部机制，建议不做修改。&lt;/li>
+&lt;li>生成好的任务日志，会处于初始化的状态，等待执行器获取到内存的调度队列中。&lt;/li>
+&lt;/ul>
+&lt;h6>6.4 任务日志的状态&lt;span class="hx-absolute -hx-mt-20" id="64-任务日志的状态">&lt;/span>
+&lt;a href="#64-%e4%bb%bb%e5%8a%a1%e6%97%a5%e5%bf%97%e7%9a%84%e7%8a%b6%e6%80%81" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;li>初始化：任务日志创建成功，等待调度器派发。&lt;/li>
+&lt;li>队列中：任务日志已被调度器放入内存队列，等待调度器派发给执行器执行。&lt;/li>
+&lt;li>调度中：任务日志已被调度器派发给执行器，等待执行器执行的结果。&lt;/li>
+&lt;li>执行成功：任务执行成功，任务日志已被执行器返回。&lt;/li>
+&lt;li>执行失败：任务执行失败，可在详情中查看详细原因。&lt;/li>
+&lt;li>取消执行：一般是调度前修改了任务详情，或者停止了应用，则会被取消。&lt;/li>
+&lt;li>任务过期：任务已经超过了调度时间，并且过期策略是丢弃，表示任务日志已被丢弃。&lt;/li>
+&lt;li>执行失败，已丢弃：任务执行失败，并且失败策略是丢弃，表示任务日志已被丢弃。&lt;/li>
+&lt;li>执行失败，重试中：表示上一次任务执行失败，正在重试中。&lt;/li>
+&lt;/ul>
+&lt;h6>6.4 内存调度队列&lt;span class="hx-absolute -hx-mt-20" id="64-内存调度队列">&lt;/span>
+&lt;a href="#64-%e5%86%85%e5%ad%98%e8%b0%83%e5%ba%a6%e9%98%9f%e5%88%97" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;li>调度器每5秒钟会从数据库获取&lt;code>初始化&lt;/code>和&lt;code>失败重试&lt;/code>状态的任务日志放到内存队列中，它是一个优先队列，队列的元素会按照执行时间从近到远排序，以便于任务日志的获取。&lt;/li>
+&lt;li>内存队列的最大容量通过&lt;code>schedulers.taskQueueCount&lt;/code>控制，避免单实例内存队列过大，影响系统的整体性能和稳定性。&lt;/li>
+&lt;li>获取到任务日志后，会通过乐观锁的方式，将任务状态变更为&lt;code>队列中&lt;/code>的状态，并等待任务到时间被调度。&lt;/li>
+&lt;/ul>
+&lt;h6>6.5 任务的调度&lt;span class="hx-absolute -hx-mt-20" id="65-任务的调度">&lt;/span>
+&lt;a href="#65-%e4%bb%bb%e5%8a%a1%e7%9a%84%e8%b0%83%e5%ba%a6" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;li>调度器启动后，会固定一个线程不停地从内存队列获取待执行的任务日志，并检查是否达到了提前调度的条件，默认是提前3秒钟调度，可以通过&lt;code>schedulers.beforeInterval&lt;/code>配置修改，默认情况下不建议修改。&lt;/li>
+&lt;li>当任务日志达到提前调度条件后，会将任务日志的状态变更为&lt;code>调度中&lt;/code>的状态，并将任务日志提交到调度线程池，调度线程池会根据任务的预设策略派发给执行器执行。&lt;/li>
+&lt;/ul>
+&lt;h6>6.6 调度策略&lt;span class="hx-absolute -hx-mt-20" id="66-调度策略">&lt;/span>
+&lt;a href="#66-%e8%b0%83%e5%ba%a6%e7%ad%96%e7%95%a5" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;p>在任务将要派发给执行器执行时，根据预设策略会有不同的调度行为，目前支持以下几种策略：&lt;/p>
+&lt;ul>
+&lt;li>随机策略：从当前在线的执行器中随机选择一个执行器，如果没有在线的执行器，则会进入失败策略的处理中。&lt;/li>
+&lt;li>分片策略：获取所有在线的执行器，每个执行器都会派发任务，并且携带分片参数（page和total），以便于使用方做大任务的分片处理。
+选定好调度策略之后，会通过通过HTTP协议调用执行器暴露的WEB服务接口，将任务派发给执行器执行。&lt;/li>
+&lt;/ul>
+&lt;h6>6.7 失败策略&lt;span class="hx-absolute -hx-mt-20" id="67-失败策略">&lt;/span>
+&lt;a href="#67-%e5%a4%b1%e8%b4%a5%e7%ad%96%e7%95%a5" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;p>不管因何种原因导致的调度失败，都会进入失败策略的处理中，失败策略的处理会根据预设的策略进行处理，失败的原因可以通过管理平台的任务日志详情看，目前支持以下几种策略：&lt;/p>
+&lt;ul>
+&lt;li>失败后丢弃：任务执行失败，任务日志会被丢弃。&lt;/li>
+&lt;li>失败后重试：任务执行失败，任务日志会被重新放入内存队列，等待下次调度。&lt;/li>
+&lt;/ul>
+&lt;p>在失败重试的场景下，可以配置最大的重试次数，默认是5次，超过最大重试次数后，任务日志会被丢弃，并记录信息。&lt;/p>
+&lt;h5>7. 数据的清理&lt;span class="hx-absolute -hx-mt-20" id="7-数据的清理">&lt;/span>
+&lt;a href="#7-%e6%95%b0%e6%8d%ae%e7%9a%84%e6%b8%85%e7%90%86" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>下线的执行器、任务的调度日志、统计的数据等，为了避免系统内数据一直无限增长，需要定期清理这些数据，避免系统内数据量过大，影响系统的性能。数据的保留时间可以通过&lt;code>data.maxRetainDays&lt;/code>修改，默认保存5天。&lt;/p>
+&lt;h5>8. 安全性的设计&lt;span class="hx-absolute -hx-mt-20" id="8-安全性的设计">&lt;/span>
+&lt;a href="#8-%e5%ae%89%e5%85%a8%e6%80%a7%e7%9a%84%e8%ae%be%e8%ae%a1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>执行器与调度器之间的交互接口，均采用签名校验的方式，以保证数据的安全性。签名秘钥由调度器的配置决定，执行器需要保持一致。接入方在接入时，可以按需自定义，以免和大众一样，签名验证算法简要概括如下：&lt;/p>
+&lt;ul>
+&lt;li>发送端将待签名参数按照参数名称的字典序排序。&lt;/li>
+&lt;li>将排序后的参数按照key=value的格式拼接成一个字符串。&lt;/li>
+&lt;li>将拼接后的字符串和秘钥进行MD5加密。&lt;/li>
+&lt;li>将加密后的MD5值作为签名参数，添加到请求参数中。&lt;/li>
+&lt;li>接收端将请求参数中的签名参数取出，按照相同的算法进行签名。&lt;/li>
+&lt;li>将签名后的MD5值与请求参数中的签名参数进行比较，如果一致，则认为请求是合法的。&lt;/li>
+&lt;/ul>
+&lt;p>另外，调度器会管理两套签名秘钥，一套用于管理后台的UI交互，一套用于执行器的SDK交互，以保证安全性。如果要修改管理后台的UI秘钥，则需要自行构建一下。&lt;/p>
+&lt;h5>9. 权限的设计&lt;span class="hx-absolute -hx-mt-20" id="9-权限的设计">&lt;/span>
+&lt;a href="#9-%e6%9d%83%e9%99%90%e7%9a%84%e8%ae%be%e8%ae%a1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>权限支持两种维度，一种是租户级别的权限，一种是接口级别的权限，可以满足业务线权限隔离的需求，接口级别的权限，可以满足某些用户只能查看，不能编辑任务的需求，使用时可以按需开不同的权限。&lt;/p>
+&lt;h5>10. 调度器的优雅关闭&lt;span class="hx-absolute -hx-mt-20" id="10-调度器的优雅关闭">&lt;/span>
+&lt;a href="#10-%e8%b0%83%e5%ba%a6%e5%99%a8%e7%9a%84%e4%bc%98%e9%9b%85%e5%85%b3%e9%97%ad" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>优雅关闭的设计目的是为了调度器关闭时可以做好收尾工作，规避因关闭、重启导致数据丢失和不一致性的问题。简单来说，在调度器关闭时，会有以下的行为：&lt;/p>
+&lt;ul>
+&lt;li>停止生成新的任务日志。&lt;/li>
+&lt;li>停止获取任务日志到内存队列。&lt;/li>
+&lt;li>等待所有的任务日志派发完成。&lt;/li>
+&lt;li>停止调度器的心跳，优雅的关闭各个线程池，等待线程池中的任务执行完成。&lt;/li>
+&lt;/ul>
+&lt;p>为了达到上述的效果，避免收到关闭命令时，网络通道、数据库连接等相关资源已关闭，调度器修改了&lt;code>ShutdownHook&lt;/code>的默认行为，优雅下线的动作会先于系统默认的hook执行，因此确保关闭前所依赖的资源可用。细节可查看源码&lt;code>cn.horace.cronjob.commons.utils.shutdown.ShutdownHookManager&lt;/code>。&lt;/p></description></item></channel></rss>

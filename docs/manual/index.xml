@@ -1,315 +1,215 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>cron-job 分布式任务调度平台 – 使用手册</title>
-    <link>http://localhost:1313/docs/manual/</link>
-    <description>Recent content in 使用手册 on cron-job 分布式任务调度平台</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    
-	  <atom:link href="http://localhost:1313/docs/manual/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-      
-        
-      
-    
-    
-    <item>
-      <title>执行器SDK</title>
-      <link>http://localhost:1313/docs/manual/executor-sdk/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://localhost:1313/docs/manual/executor-sdk/</guid>
-      <description>
-        
-        
-        &lt;h4&gt;一、原生Java版本&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;一原生java版本&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%b8%80%e5%8e%9f%e7%94%9fjava%e7%89%88%e6%9c%ac&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;h5&gt;1. 项目依赖&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;1-项目依赖&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#1-%e9%a1%b9%e7%9b%ae%e4%be%9d%e8%b5%96&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;div class=&#34;hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code&#34;&gt;
-
-&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;&amp;lt;!-- https://mvnrepository.com/artifact/cn.horace.cronjob/cronjob-executor --&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;cn.horace.cronjob&lt;span class=&#34;nt&#34;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;cronjob-executor&lt;span class=&#34;nt&#34;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;最新版本&lt;span class=&#34;nt&#34;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0&#34;&gt;
-  &lt;button
-    class=&#34;hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50&#34;
-    title=&#34;Copy code&#34;
-  &gt;
-    &lt;div class=&#34;copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4&#34;&gt;&lt;/div&gt;
-    &lt;div class=&#34;success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4&#34;&gt;&lt;/div&gt;
-  &lt;/button&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h5&gt;2. 启动类入口&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;2-启动类入口&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#2-%e5%90%af%e5%8a%a8%e7%b1%bb%e5%85%a5%e5%8f%a3&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;p&gt;原生版本的启动类入口为&lt;code&gt;CronJobExecutorClient&lt;/code&gt;，使用方式如下：&lt;/p&gt;
-&lt;div class=&#34;hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code&#34;&gt;
-
-&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// taskObjects 为任务对象集合，原生Java版本需要手动放入一个集合中&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ExecutorConfig&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;config&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ExecutorConfig&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;Builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;newBuilder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;taskObjects&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;address&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;http://127.0.0.1:9527&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 调度器地址&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;tenant&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;horace&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 租户代码&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;appName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;example-executor&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 应用名称&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;appDesc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;普通示例执行器&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 应用描述&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;tag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;common&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 标签&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;build&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CronJobExecutorClient&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;init&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;config&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0&#34;&gt;
-  &lt;button
-    class=&#34;hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50&#34;
-    title=&#34;Copy code&#34;
-  &gt;
-    &lt;div class=&#34;copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4&#34;&gt;&lt;/div&gt;
-    &lt;div class=&#34;success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4&#34;&gt;&lt;/div&gt;
-  &lt;/button&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h4&gt;二、SpringBoot版本&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;二springboot版本&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%ba%8cspringboot%e7%89%88%e6%9c%ac&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;h5&gt;1. 项目依赖&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;1-项目依赖-1&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#1-%e9%a1%b9%e7%9b%ae%e4%be%9d%e8%b5%96-1&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;div class=&#34;hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code&#34;&gt;
-
-&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;&amp;lt;!-- https://mvnrepository.com/artifact/cn.horace.cronjob/cronjob-executor-starter --&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;cn.horace.cronjob&lt;span class=&#34;nt&#34;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;cronjob-executor-starter&lt;span class=&#34;nt&#34;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;最新版本&lt;span class=&#34;nt&#34;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0&#34;&gt;
-  &lt;button
-    class=&#34;hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50&#34;
-    title=&#34;Copy code&#34;
-  &gt;
-    &lt;div class=&#34;copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4&#34;&gt;&lt;/div&gt;
-    &lt;div class=&#34;success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4&#34;&gt;&lt;/div&gt;
-  &lt;/button&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h5&gt;2. 配置方式&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;2-配置方式&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#2-%e9%85%8d%e7%bd%ae%e6%96%b9%e5%bc%8f&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;ul&gt;
-&lt;li&gt;代码配置，注意与原生版本的配置类不同，这里是&lt;code&gt;ExecutorStarterConfig&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code&#34;&gt;
-
-&lt;pre&gt;&lt;code&gt;@Bean
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>cron-job 分布式任务调度平台 – 使用手册</title><link>https://example.org/docs/manual/</link><description>Recent content in 使用手册 on cron-job 分布式任务调度平台</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><atom:link href="https://example.org/docs/manual/index.xml" rel="self" type="application/rss+xml"/><item><title>执行器SDK</title><link>https://example.org/docs/manual/executor-sdk/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/manual/executor-sdk/</guid><description>
+&lt;h4>一、原生Java版本&lt;span class="hx-absolute -hx-mt-20" id="一原生java版本">&lt;/span>
+&lt;a href="#%e4%b8%80%e5%8e%9f%e7%94%9fjava%e7%89%88%e6%9c%ac" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;h5>1. 项目依赖&lt;span class="hx-absolute -hx-mt-20" id="1-项目依赖">&lt;/span>
+&lt;a href="#1-%e9%a1%b9%e7%9b%ae%e4%be%9d%e8%b5%96" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!-- https://mvnrepository.com/artifact/cn.horace.cronjob/cronjob-executor --&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;dependency&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;groupId&amp;gt;&lt;/span>cn.horace.cronjob&lt;span class="nt">&amp;lt;/groupId&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;artifactId&amp;gt;&lt;/span>cronjob-executor&lt;span class="nt">&amp;lt;/artifactId&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;version&amp;gt;&lt;/span>最新版本&lt;span class="nt">&amp;lt;/version&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/dependency&amp;gt;&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h5>2. 启动类入口&lt;span class="hx-absolute -hx-mt-20" id="2-启动类入口">&lt;/span>
+&lt;a href="#2-%e5%90%af%e5%8a%a8%e7%b1%bb%e5%85%a5%e5%8f%a3" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>原生版本的启动类入口为&lt;code>CronJobExecutorClient&lt;/code>，使用方式如下：&lt;/p>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// taskObjects 为任务对象集合，原生Java版本需要手动放入一个集合中&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">ExecutorConfig&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">config&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ExecutorConfig&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">Builder&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">newBuilder&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">taskObjects&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">address&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;http://127.0.0.1:9527&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 调度器地址&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">tenant&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;horace&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 租户代码&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">appName&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;example-executor&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 应用名称&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">appDesc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;普通示例执行器&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 应用描述&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">tag&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;common&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">// 标签&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">build&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">CronJobExecutorClient&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">config&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="na">start&lt;/span>&lt;span class="p">();&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h4>二、SpringBoot版本&lt;span class="hx-absolute -hx-mt-20" id="二springboot版本">&lt;/span>
+&lt;a href="#%e4%ba%8cspringboot%e7%89%88%e6%9c%ac" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;h5>1. 项目依赖&lt;span class="hx-absolute -hx-mt-20" id="1-项目依赖-1">&lt;/span>
+&lt;a href="#1-%e9%a1%b9%e7%9b%ae%e4%be%9d%e8%b5%96-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!-- https://mvnrepository.com/artifact/cn.horace.cronjob/cronjob-executor-starter --&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;dependency&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;groupId&amp;gt;&lt;/span>cn.horace.cronjob&lt;span class="nt">&amp;lt;/groupId&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;artifactId&amp;gt;&lt;/span>cronjob-executor-starter&lt;span class="nt">&amp;lt;/artifactId&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;version&amp;gt;&lt;/span>最新版本&lt;span class="nt">&amp;lt;/version&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/dependency&amp;gt;&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h5>2. 配置方式&lt;span class="hx-absolute -hx-mt-20" id="2-配置方式">&lt;/span>
+&lt;a href="#2-%e9%85%8d%e7%bd%ae%e6%96%b9%e5%bc%8f" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
+&lt;li>代码配置，注意与原生版本的配置类不同，这里是&lt;code>ExecutorStarterConfig&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+&lt;pre>&lt;code>@Bean
 public ExecutorStarterConfig cronJobExecutorStarterConfig() {
-    ExecutorStarterConfig config = new ExecutorStarterConfig();
-    config.setAddress(&amp;#34;http://127.0.0.1:9527&amp;#34;);
-    config.setTenant(&amp;#34;horace&amp;#34;);
-    config.setAppName(&amp;#34;example-executor-starter&amp;#34;);
-    config.setAppDesc(&amp;#34;Spring示例执行器&amp;#34;);
-    config.setTag(&amp;#34;common&amp;#34;);
-    return config;
-}&lt;/code&gt;&lt;/pre&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0&#34;&gt;
-  &lt;button
-    class=&#34;hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50&#34;
-    title=&#34;Copy code&#34;
-  &gt;
-    &lt;div class=&#34;copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4&#34;&gt;&lt;/div&gt;
-    &lt;div class=&#34;success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4&#34;&gt;&lt;/div&gt;
-  &lt;/button&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;配置文件配置，引入依赖后，即可直接在&lt;code&gt;application.properties&lt;/code&gt;配置文件中配置，并且有智能提示
-&lt;img alt=&#34;微信二维码&#34; src=&#34;http://localhost:1313/images/properties-config.png&#34; style=&#34;margin-left: 0;&#34;&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;注意：代码配置优先于配置文件的配置，即有代码配置的情况下，配置文件的配置不生效。&lt;/p&gt;
-&lt;h5&gt;3. 启动方式&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;3-启动方式&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#3-%e5%90%af%e5%8a%a8%e6%96%b9%e5%bc%8f&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h5&gt;&lt;ul&gt;
-&lt;li&gt;增加注解&lt;code&gt;@EnableCronJob&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;启动Spring容器&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p/&gt;
-&lt;p&gt;详情参考：&lt;a href=&#34;http://localhost:1313/docs/quickstart&#34; &gt;快速开始&lt;/a&gt;&lt;/p&gt;
-&lt;h4&gt;三、其他版本&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;三其他版本&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%b8%89%e5%85%b6%e4%bb%96%e7%89%88%e6%9c%ac&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;正在规划中&amp;hellip;.Go、Shell等&lt;/p&gt;
-
-      </description>
-    </item>
-    
-    <item>
-      <title>详细配置</title>
-      <link>http://localhost:1313/docs/manual/config/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://localhost:1313/docs/manual/config/</guid>
-      <description>
-        
-        
-        &lt;h4&gt;一、调度器完整配置&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;一调度器完整配置&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%b8%80%e8%b0%83%e5%ba%a6%e5%99%a8%e5%ae%8c%e6%95%b4%e9%85%8d%e7%bd%ae&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;以下配置文件中包含了所有配置项，是经历过调优的最佳实践，使用时可以根据自己的需求场景修改。&lt;/p&gt;
-&lt;div class=&#34;hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code&#34;&gt;
-
-&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-properties&#34; data-lang=&#34;properties&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;############# 调度器配置 #############&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 用于标识实例的唯一性&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;server.id&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;1&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 调度器提前调度时间，默认3000毫秒，用作在一些网络等延迟场景下提前调度，任务会先放入执行器内存队列，时间到达时才会真正执行&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;schedulers.beforeInterval&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;3000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 调度器超时时间，调度器多久没心跳时则超时，单位毫秒&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;schedulers.timeout&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;30000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 调度器每次从任务日志加载到内存队列的任务数量，如果任务量大，1秒内调度任务数多，则可以调高此值增加吞吐量，如果任务量少，此值过大会导致其他调度器拿不到调度任务，存在调度倾斜的问题&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;schedulers.taskQueueCount&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;10&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 调度器预生成任务日志的时候，只预生成生成配置值分钟以内的任务日志&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;schedulers.taskPreGenerationMaxTimeMinutes&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;3&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 任务日志、执行器记录、统计记录最大保留的天数&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;data.maxRetainDays&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;5&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 管理后台与调度器通信的签名Key&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;manager.signKey&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;6b540a079699b196d678af5801b79b4e&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 执行器与调度器通信的签名Key&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;executor.signKey&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;7d890a079948b196756rtf5452d2245t&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;############# 调度器配置 #############&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;############# 执行器配置 #############&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 执行器的超时时间，超过这个时间没有心跳则认为是下线&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;executor.timeout&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;30000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;############# 执行器配置 #############&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;############# 数据源配置 #############&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;database.driverClassName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;com.mysql.cj.jdbc.Driver&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;database.url&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;jdbc:mysql://localhost:3306/cron-job?useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;useSSL=false&amp;amp;allowPublicKeyRetrieval=true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;database.username&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;horace&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;database.password&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;SGJIWkjfdsof923847&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 初始化时建立物理连接的个数。初始化发生在显示调用init方法，或者第一次getConnection时&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;database.initialSize&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;5&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 连接池最大连接数&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;database.maxActive&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;20&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 连接超时时间，毫秒&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;database.connectTimeout&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;3000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 读取超时时间，毫秒&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;database.socketTimeout&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;5000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;############# 数据源配置 #############&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;############# Tomcat配置 #############&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Tomcat服务配置&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;server.port&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;9527&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 当所有可能的请求处理线程都在使用时，传入连接请求的最大队列长度。&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;server.tomcat.accept-count&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;500&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 服务器在任何给定时间接受和处理的最大连接数。一旦达到限制，操作系统仍然可以根据“acceptCount”属性接受连接。&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;server.tomcat.max-connections&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;8192&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 任何HTTP post请求中表单内容的最大大小。&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;server.tomcat.max-http-form-post-size&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;2MB&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 最大的工作线程数&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;server.tomcat.threads.max&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;600&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 最小工作线程数&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;server.tomcat.threads.min-spare&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;10&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;############# Tomcat配置 #############&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0&#34;&gt;
-  &lt;button
-    class=&#34;hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50&#34;
-    title=&#34;Copy code&#34;
-  &gt;
-    &lt;div class=&#34;copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4&#34;&gt;&lt;/div&gt;
-    &lt;div class=&#34;success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4&#34;&gt;&lt;/div&gt;
-  &lt;/button&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h4&gt;二、管理后台UI配置&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;二管理后台ui配置&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%ba%8c%e7%ae%a1%e7%90%86%e5%90%8e%e5%8f%b0ui%e9%85%8d%e7%bd%ae&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;路径在&lt;code&gt;cronjob-managerui/config/&lt;/code&gt;中：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;defaultSettings.ts&lt;/code&gt;：管理后台UI的默认配置，其中&lt;code&gt;signKey&lt;/code&gt;是管理后台UI与调度器通信的签名Key，如需自定义，则需要与管理后台UI的配置保持一致，修改配置需要自行构建。&lt;/li&gt;
-&lt;li&gt;其他一些配置如无特别需要，建议不做修改。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4&gt;三、注意事项&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;三注意事项&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%b8%89%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;server.id&lt;/code&gt; 是用于区分调度器唯一性的标识，必须保证唯一，否则后者启动会失败。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;server.port&lt;/code&gt; 是调度器的通信端口，如果部署在同一台物理机，则需要修改端口。高可用角度讲，不建议多个调度器部署在同一台物理机。&lt;/li&gt;
-&lt;li&gt;数据库相关的，按照自己的实际情况修改即可。&lt;/li&gt;
-&lt;li&gt;manager.signKey：管理后台UI与调度器通信的签名Key，如需自定义，则需要与管理后台UI的配置保持一致，在&lt;code&gt;cronjob-managerui/config/defaultSettings.ts&lt;/code&gt;中的&lt;code&gt;signKey&lt;/code&gt;。&lt;/li&gt;
-&lt;li&gt;executor.signKey：执行器与调度器通信的签名Key，如需自定义，则需要与执行器的配置保持一致。&lt;/li&gt;
-&lt;/ul&gt;
-
-      </description>
-    </item>
-    
-    <item>
-      <title>用户管理</title>
-      <link>http://localhost:1313/docs/manual/user/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://localhost:1313/docs/manual/user/</guid>
-      <description>
-        
-        
-        &lt;h4&gt;一、创建用户&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;一创建用户&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%b8%80%e5%88%9b%e5%bb%ba%e7%94%a8%e6%88%b7&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/create_user.png&#34; alt=&#34;创建用户&#34; loading=&#34;lazy&#34; /&gt;&lt;/p&gt;
-&lt;h4&gt;二、授权菜单&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;二授权菜单&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%ba%8c%e6%8e%88%e6%9d%83%e8%8f%9c%e5%8d%95&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;菜单权限控制到接口级别，可按需开权限
-&lt;img src=&#34;http://localhost:1313/images/grant_menu.png&#34; alt=&#34;授权菜单&#34; loading=&#34;lazy&#34; /&gt;&lt;/p&gt;
-&lt;h4&gt;三、授权租户&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;三授权租户&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%b8%89%e6%8e%88%e6%9d%83%e7%a7%9f%e6%88%b7&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/grant_tenant.png&#34; alt=&#34;授权租户&#34; loading=&#34;lazy&#34; /&gt;&lt;/p&gt;
-
-      </description>
-    </item>
-    
-    <item>
-      <title>应用管理</title>
-      <link>http://localhost:1313/docs/manual/app/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://localhost:1313/docs/manual/app/</guid>
-      <description>
-        
-        
-        &lt;h4&gt;一、停止应用&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;一停止应用&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%b8%80%e5%81%9c%e6%ad%a2%e5%ba%94%e7%94%a8&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;停止应用时，会将应用下所有的任务停止，未被调度的任务将会取消。
-&lt;img src=&#34;http://localhost:1313/images/stop_app.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34; /&gt;&lt;/p&gt;
-
-      </description>
-    </item>
-    
-    <item>
-      <title>任务管理</title>
-      <link>http://localhost:1313/docs/manual/task/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://localhost:1313/docs/manual/task/</guid>
-      <description>
-        
-        
-        &lt;h4&gt;一、操作界面&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;一操作界面&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%b8%80%e6%93%8d%e4%bd%9c%e7%95%8c%e9%9d%a2&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;启动、启动任务：都是启动任务，区别在于，外层的【启动】按钮更为快捷，不需要点开【更多】。&lt;/li&gt;
-&lt;li&gt;跑一次、执行一次：都表示只执行一次，但是不启动任务，适用于需要手动触发一次的场景，并且可以设定参数。&lt;/li&gt;
-&lt;li&gt;标签：任务的标签，规划是用于分类管理任务的，方便测试环境多迭代场景使用。
-&lt;img src=&#34;http://localhost:1313/images/start_task.png&#34; alt=&#34;任务管理&#34; loading=&#34;lazy&#34; /&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4&gt;二、编辑任务&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;二编辑任务&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%ba%8c%e7%bc%96%e8%be%91%e4%bb%bb%e5%8a%a1&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;内置了Cron表达式编辑器，免去了跳转到第三方网站编辑的麻烦，并且实时展示最近的执行时间。
-&lt;img src=&#34;http://localhost:1313/images/edit_task.png&#34; alt=&#34;编辑任务&#34; loading=&#34;lazy&#34; /&gt;&lt;/p&gt;
-
-      </description>
-    </item>
-    
-    <item>
-      <title>任务日志管理</title>
-      <link>http://localhost:1313/docs/manual/tasklog/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://localhost:1313/docs/manual/tasklog/</guid>
-      <description>
-        
-        
-        &lt;h4&gt;一、任务日志列表&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;一任务日志列表&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%b8%80%e4%bb%bb%e5%8a%a1%e6%97%a5%e5%bf%97%e5%88%97%e8%a1%a8&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;默认情况下，只查询最近30分钟的任务日志，可点击【展开】筛选更多查询项。&lt;/li&gt;
-&lt;li&gt;查询范围最大只支持3小时内的查询范围，如果要查询更多时间的范围，需要手动选择时间，避免大范围查询的性能问题。
-&lt;img src=&#34;http://localhost:1313/images/tasklog_list.png&#34; alt=&#34;任务日志列表&#34; loading=&#34;lazy&#34; /&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4&gt;二、任务日志详情&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;二任务日志详情&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#%e4%ba%8c%e4%bb%bb%e5%8a%a1%e6%97%a5%e5%bf%97%e8%af%a6%e6%83%85&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;任务日志状态说明：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;初始化：任务日志创建成功，等待调度器派发。&lt;/li&gt;
-&lt;li&gt;队列中：任务日志已被调度器放入内存队列，等待调度器派发给执行器执行。&lt;/li&gt;
-&lt;li&gt;调度中：任务日志已被调度器派发给执行器，等待执行器执行的结果。&lt;/li&gt;
-&lt;li&gt;执行成功：任务执行成功，任务日志已被执行器返回。&lt;/li&gt;
-&lt;li&gt;执行失败：任务执行失败，可在详情中查看详细原因。&lt;/li&gt;
-&lt;li&gt;取消执行：一般是调度前修改了任务详情，或者停止了应用，则会被取消。&lt;/li&gt;
-&lt;li&gt;任务过期：任务已经超过了调度时间，并且过期策略是丢弃，表示任务日志已被丢弃。&lt;/li&gt;
-&lt;li&gt;执行失败，已丢弃：任务执行失败，并且失败策略是丢弃，表示任务日志已被丢弃。&lt;/li&gt;
-&lt;li&gt;执行失败，重试中：表示上一次任务执行失败，正在重试中。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/tasklog_detail.png&#34; alt=&#34;任务日志列表&#34; loading=&#34;lazy&#34; /&gt;&lt;/p&gt;
-
-      </description>
-    </item>
-    
-  </channel>
-</rss>
+ExecutorStarterConfig config = new ExecutorStarterConfig();
+config.setAddress(&amp;#34;http://127.0.0.1:9527&amp;#34;);
+config.setTenant(&amp;#34;horace&amp;#34;);
+config.setAppName(&amp;#34;example-executor-starter&amp;#34;);
+config.setAppDesc(&amp;#34;Spring示例执行器&amp;#34;);
+config.setTag(&amp;#34;common&amp;#34;);
+return config;
+}&lt;/code>&lt;/pre>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;ul>
+&lt;li>配置文件配置，引入依赖后，即可直接在&lt;code>application.properties&lt;/code>配置文件中配置，并且有智能提示
+&lt;img alt="微信二维码" src="https://example.org/images/properties-config.png" style="margin-left: 0;">&lt;/li>
+&lt;/ul>
+&lt;p>注意：代码配置优先于配置文件的配置，即有代码配置的情况下，配置文件的配置不生效。&lt;/p>
+&lt;h5>3. 启动方式&lt;span class="hx-absolute -hx-mt-20" id="3-启动方式">&lt;/span>
+&lt;a href="#3-%e5%90%af%e5%8a%a8%e6%96%b9%e5%bc%8f" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
+&lt;li>增加注解&lt;code>@EnableCronJob&lt;/code>&lt;/li>
+&lt;li>启动Spring容器&lt;/li>
+&lt;/ul>
+&lt;p/>
+&lt;p>详情参考：&lt;a href="https://example.org/docs/quickstart" >快速开始&lt;/a>&lt;/p>
+&lt;h4>三、其他版本&lt;span class="hx-absolute -hx-mt-20" id="三其他版本">&lt;/span>
+&lt;a href="#%e4%b8%89%e5%85%b6%e4%bb%96%e7%89%88%e6%9c%ac" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>正在规划中&amp;hellip;.Go、Shell等&lt;/p></description></item><item><title>详细配置</title><link>https://example.org/docs/manual/config/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/manual/config/</guid><description>
+&lt;h4>一、调度器完整配置&lt;span class="hx-absolute -hx-mt-20" id="一调度器完整配置">&lt;/span>
+&lt;a href="#%e4%b8%80%e8%b0%83%e5%ba%a6%e5%99%a8%e5%ae%8c%e6%95%b4%e9%85%8d%e7%bd%ae" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>以下配置文件中包含了所有配置项，是经历过调优的最佳实践，使用时可以根据自己的需求场景修改。&lt;/p>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-properties" data-lang="properties">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">############# 调度器配置 #############&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 用于标识实例的唯一性&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">server.id&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 调度器提前调度时间，默认3000毫秒，用作在一些网络等延迟场景下提前调度，任务会先放入执行器内存队列，时间到达时才会真正执行&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">schedulers.beforeInterval&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">3000&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 调度器超时时间，调度器多久没心跳时则超时，单位毫秒&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">schedulers.timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">30000&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 调度器每次从任务日志加载到内存队列的任务数量，如果任务量大，1秒内调度任务数多，则可以调高此值增加吞吐量，如果任务量少，此值过大会导致其他调度器拿不到调度任务，存在调度倾斜的问题&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">schedulers.taskQueueCount&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">10&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 调度器预生成任务日志的时候，只预生成生成配置值分钟以内的任务日志&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">schedulers.taskPreGenerationMaxTimeMinutes&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">3&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 任务日志、执行器记录、统计记录最大保留的天数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">data.maxRetainDays&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">5&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 管理后台与调度器通信的签名Key&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">manager.signKey&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">6b540a079699b196d678af5801b79b4e&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 执行器与调度器通信的签名Key&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">executor.signKey&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">7d890a079948b196756rtf5452d2245t&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">############# 调度器配置 #############&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">############# 执行器配置 #############&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 执行器的超时时间，超过这个时间没有心跳则认为是下线&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">executor.timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">30000&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">############# 执行器配置 #############&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">############# 数据源配置 #############&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">database.driverClassName&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">com.mysql.cj.jdbc.Driver&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">database.url&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">jdbc:mysql://localhost:3306/cron-job?useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;useSSL=false&amp;amp;allowPublicKeyRetrieval=true&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">database.username&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">horace&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">database.password&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">SGJIWkjfdsof923847&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 初始化时建立物理连接的个数。初始化发生在显示调用init方法，或者第一次getConnection时&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">database.initialSize&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">5&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 连接池最大连接数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">database.maxActive&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">20&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 连接超时时间，毫秒&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">database.connectTimeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">3000&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 读取超时时间，毫秒&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">database.socketTimeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">5000&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">############# 数据源配置 #############&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">############# Tomcat配置 #############&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Tomcat服务配置&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">server.port&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">9527&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 当所有可能的请求处理线程都在使用时，传入连接请求的最大队列长度。&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">server.tomcat.accept-count&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">500&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 服务器在任何给定时间接受和处理的最大连接数。一旦达到限制，操作系统仍然可以根据“acceptCount”属性接受连接。&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">server.tomcat.max-connections&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">8192&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 任何HTTP post请求中表单内容的最大大小。&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">server.tomcat.max-http-form-post-size&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">2MB&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 最大的工作线程数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">server.tomcat.threads.max&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">600&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 最小工作线程数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">server.tomcat.threads.min-spare&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">10&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">############# Tomcat配置 #############&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h4>二、管理后台UI配置&lt;span class="hx-absolute -hx-mt-20" id="二管理后台ui配置">&lt;/span>
+&lt;a href="#%e4%ba%8c%e7%ae%a1%e7%90%86%e5%90%8e%e5%8f%b0ui%e9%85%8d%e7%bd%ae" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>路径在&lt;code>cronjob-managerui/config/&lt;/code>中：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>defaultSettings.ts&lt;/code>：管理后台UI的默认配置，其中&lt;code>signKey&lt;/code>是管理后台UI与调度器通信的签名Key，如需自定义，则需要与管理后台UI的配置保持一致，修改配置需要自行构建。&lt;/li>
+&lt;li>其他一些配置如无特别需要，建议不做修改。&lt;/li>
+&lt;/ul>
+&lt;h4>三、注意事项&lt;span class="hx-absolute -hx-mt-20" id="三注意事项">&lt;/span>
+&lt;a href="#%e4%b8%89%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;ul>
+&lt;li>&lt;code>server.id&lt;/code> 是用于区分调度器唯一性的标识，必须保证唯一，否则后者启动会失败。&lt;/li>
+&lt;li>&lt;code>server.port&lt;/code> 是调度器的通信端口，如果部署在同一台物理机，则需要修改端口。高可用角度讲，不建议多个调度器部署在同一台物理机。&lt;/li>
+&lt;li>数据库相关的，按照自己的实际情况修改即可。&lt;/li>
+&lt;li>manager.signKey：管理后台UI与调度器通信的签名Key，如需自定义，则需要与管理后台UI的配置保持一致，在&lt;code>cronjob-managerui/config/defaultSettings.ts&lt;/code>中的&lt;code>signKey&lt;/code>。&lt;/li>
+&lt;li>executor.signKey：执行器与调度器通信的签名Key，如需自定义，则需要与执行器的配置保持一致。&lt;/li>
+&lt;/ul></description></item><item><title>用户管理</title><link>https://example.org/docs/manual/user/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/manual/user/</guid><description>
+&lt;h4>一、创建用户&lt;span class="hx-absolute -hx-mt-20" id="一创建用户">&lt;/span>
+&lt;a href="#%e4%b8%80%e5%88%9b%e5%bb%ba%e7%94%a8%e6%88%b7" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>&lt;img src="https://example.org/images/create_user.png" alt="创建用户" loading="lazy" />&lt;/p>
+&lt;h4>二、授权菜单&lt;span class="hx-absolute -hx-mt-20" id="二授权菜单">&lt;/span>
+&lt;a href="#%e4%ba%8c%e6%8e%88%e6%9d%83%e8%8f%9c%e5%8d%95" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>菜单权限控制到接口级别，可按需开权限
+&lt;img src="https://example.org/images/grant_menu.png" alt="授权菜单" loading="lazy" />&lt;/p>
+&lt;h4>三、授权租户&lt;span class="hx-absolute -hx-mt-20" id="三授权租户">&lt;/span>
+&lt;a href="#%e4%b8%89%e6%8e%88%e6%9d%83%e7%a7%9f%e6%88%b7" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>&lt;img src="https://example.org/images/grant_tenant.png" alt="授权租户" loading="lazy" />&lt;/p></description></item><item><title>应用管理</title><link>https://example.org/docs/manual/app/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/manual/app/</guid><description>
+&lt;h4>一、停止应用&lt;span class="hx-absolute -hx-mt-20" id="一停止应用">&lt;/span>
+&lt;a href="#%e4%b8%80%e5%81%9c%e6%ad%a2%e5%ba%94%e7%94%a8" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>停止应用时，会将应用下所有的任务停止，未被调度的任务将会取消。
+&lt;img src="https://example.org/images/stop_app.png" alt="" loading="lazy" />&lt;/p></description></item><item><title>任务管理</title><link>https://example.org/docs/manual/task/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/manual/task/</guid><description>
+&lt;h4>一、操作界面&lt;span class="hx-absolute -hx-mt-20" id="一操作界面">&lt;/span>
+&lt;a href="#%e4%b8%80%e6%93%8d%e4%bd%9c%e7%95%8c%e9%9d%a2" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;ul>
+&lt;li>启动、启动任务：都是启动任务，区别在于，外层的【启动】按钮更为快捷，不需要点开【更多】。&lt;/li>
+&lt;li>跑一次、执行一次：都表示只执行一次，但是不启动任务，适用于需要手动触发一次的场景，并且可以设定参数。&lt;/li>
+&lt;li>标签：任务的标签，规划是用于分类管理任务的，方便测试环境多迭代场景使用。
+&lt;img src="https://example.org/images/start_task.png" alt="任务管理" loading="lazy" />&lt;/li>
+&lt;/ul>
+&lt;h4>二、编辑任务&lt;span class="hx-absolute -hx-mt-20" id="二编辑任务">&lt;/span>
+&lt;a href="#%e4%ba%8c%e7%bc%96%e8%be%91%e4%bb%bb%e5%8a%a1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>内置了Cron表达式编辑器，免去了跳转到第三方网站编辑的麻烦，并且实时展示最近的执行时间。
+&lt;img src="https://example.org/images/edit_task.png" alt="编辑任务" loading="lazy" />&lt;/p></description></item><item><title>任务日志管理</title><link>https://example.org/docs/manual/tasklog/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/manual/tasklog/</guid><description>
+&lt;h4>一、任务日志列表&lt;span class="hx-absolute -hx-mt-20" id="一任务日志列表">&lt;/span>
+&lt;a href="#%e4%b8%80%e4%bb%bb%e5%8a%a1%e6%97%a5%e5%bf%97%e5%88%97%e8%a1%a8" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;ul>
+&lt;li>默认情况下，只查询最近30分钟的任务日志，可点击【展开】筛选更多查询项。&lt;/li>
+&lt;li>查询范围最大只支持3小时内的查询范围，如果要查询更多时间的范围，需要手动选择时间，避免大范围查询的性能问题。
+&lt;img src="https://example.org/images/tasklog_list.png" alt="任务日志列表" loading="lazy" />&lt;/li>
+&lt;/ul>
+&lt;h4>二、任务日志详情&lt;span class="hx-absolute -hx-mt-20" id="二任务日志详情">&lt;/span>
+&lt;a href="#%e4%ba%8c%e4%bb%bb%e5%8a%a1%e6%97%a5%e5%bf%97%e8%af%a6%e6%83%85" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>任务日志状态说明：&lt;/p>
+&lt;ul>
+&lt;li>初始化：任务日志创建成功，等待调度器派发。&lt;/li>
+&lt;li>队列中：任务日志已被调度器放入内存队列，等待调度器派发给执行器执行。&lt;/li>
+&lt;li>调度中：任务日志已被调度器派发给执行器，等待执行器执行的结果。&lt;/li>
+&lt;li>执行成功：任务执行成功，任务日志已被执行器返回。&lt;/li>
+&lt;li>执行失败：任务执行失败，可在详情中查看详细原因。&lt;/li>
+&lt;li>取消执行：一般是调度前修改了任务详情，或者停止了应用，则会被取消。&lt;/li>
+&lt;li>任务过期：任务已经超过了调度时间，并且过期策略是丢弃，表示任务日志已被丢弃。&lt;/li>
+&lt;li>执行失败，已丢弃：任务执行失败，并且失败策略是丢弃，表示任务日志已被丢弃。&lt;/li>
+&lt;li>执行失败，重试中：表示上一次任务执行失败，正在重试中。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://example.org/images/tasklog_detail.png" alt="任务日志列表" loading="lazy" />&lt;/p></description></item></channel></rss>
