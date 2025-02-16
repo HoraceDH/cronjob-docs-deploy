@@ -1,4 +1,4 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>cron-job 分布式任务调度平台 – 部署指南</title><link>https://example.org/docs/deploy/</link><description>Recent content in 部署指南 on cron-job 分布式任务调度平台</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><atom:link href="https://example.org/docs/deploy/index.xml" rel="self" type="application/rss+xml"/><item><title>集群部署</title><link>https://example.org/docs/deploy/cluster-deploy/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/deploy/cluster-deploy/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cron-Job 分布式任务调度平台 – 部署指南</title><link>https://example.org/docs/deploy/</link><description>Recent content in 部署指南 on Cron-Job 分布式任务调度平台</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><atom:link href="https://example.org/docs/deploy/index.xml" rel="self" type="application/rss+xml"/><item><title>集群部署</title><link>https://example.org/docs/deploy/cluster-deploy/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/deploy/cluster-deploy/</guid><description>
 &lt;h4>一、环境要求&lt;span class="hx-absolute -hx-mt-20" id="一环境要求">&lt;/span>
 &lt;a href="#%e4%b8%80%e7%8e%af%e5%a2%83%e8%a6%81%e6%b1%82" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;ul>
 &lt;li>OS：支持Linux、Windows、MacOS，下面以CentOS为例。&lt;/li>
@@ -8,7 +8,7 @@
 &lt;h4>二、下载地址&lt;span class="hx-absolute -hx-mt-20" id="二下载地址">&lt;/span>
 &lt;a href="#%e4%ba%8c%e4%b8%8b%e8%bd%bd%e5%9c%b0%e5%9d%80" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;ul>
 &lt;li>GitHub：https://github.com/horacedh/cron-job&lt;/li>
-&lt;li>GitEE：https://gitee.com/horacedh/cron-job&lt;/li>
+&lt;li>Gitee：https://gitee.com/horacedh/cron-job&lt;/li>
 &lt;/ul>
 &lt;h4>三、初始化数据库&lt;span class="hx-absolute -hx-mt-20" id="三初始化数据库">&lt;/span>
 &lt;a href="#%e4%b8%89%e5%88%9d%e5%a7%8b%e5%8c%96%e6%95%b0%e6%8d%ae%e5%ba%93" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>从源码根目录下，找到&lt;code>mysql.sql&lt;/code>文件，进入到MySQL命令行中，执行以下命令即可完成初始化，其中path替换为自己的路径：&lt;/p>
@@ -163,7 +163,7 @@ title="Copy code"
 &lt;a href="#%e4%ba%8c%e6%9e%84%e5%bb%ba%e9%83%a8%e7%bd%b2%e5%8c%85" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;h5>1. 源码下载&lt;span class="hx-absolute -hx-mt-20" id="1-源码下载">&lt;/span>
 &lt;a href="#1-%e6%ba%90%e7%a0%81%e4%b8%8b%e8%bd%bd" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
 &lt;li>GitHub：https://github.com/horacedh/cron-job&lt;/li>
-&lt;li>GitEE：https://gitee.com/horacedh/cron-job&lt;/li>
+&lt;li>Gitee：https://gitee.com/horacedh/cron-job&lt;/li>
 &lt;/ul>
 &lt;h5>2. 开始构建&lt;span class="hx-absolute -hx-mt-20" id="2-开始构建">&lt;/span>
 &lt;a href="#2-%e5%bc%80%e5%a7%8b%e6%9e%84%e5%bb%ba" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>

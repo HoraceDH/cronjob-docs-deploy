@@ -1,4 +1,4 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>cron-job 分布式任务调度平台 – Docs</title><link>https://example.org/docs/</link><description>Recent content in Docs on cron-job 分布式任务调度平台</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><atom:link href="https://example.org/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>执行器SDK</title><link>https://example.org/docs/manual/executor-sdk/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/manual/executor-sdk/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cron-Job 分布式任务调度平台 – Docs</title><link>https://example.org/docs/</link><description>Recent content in Docs on Cron-Job 分布式任务调度平台</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><atom:link href="https://example.org/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>执行器SDK</title><link>https://example.org/docs/manual/executor-sdk/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/manual/executor-sdk/</guid><description>
 &lt;h4>一、原生Java版本&lt;span class="hx-absolute -hx-mt-20" id="一原生java版本">&lt;/span>
 &lt;a href="#%e4%b8%80%e5%8e%9f%e7%94%9fjava%e7%89%88%e6%9c%ac" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;h5>1. 项目依赖&lt;span class="hx-absolute -hx-mt-20" id="1-项目依赖">&lt;/span>
 &lt;a href="#1-%e9%a1%b9%e7%9b%ae%e4%be%9d%e8%b5%96" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
@@ -163,17 +163,17 @@ title="Copy code"
 &lt;/ul>
 &lt;p>详情可查阅签名工具类&lt;code>cn.horace.cronjob.commons.utils.SignUtils&lt;/code>。&lt;/p></description></item><item><title>概述</title><link>https://example.org/docs/overview/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/overview/</guid><description>
 &lt;h4>一、介绍&lt;span class="hx-absolute -hx-mt-20" id="一介绍">&lt;/span>
-&lt;a href="#%e4%b8%80%e4%bb%8b%e7%bb%8d" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;h5>1. cron-job&lt;span class="hx-absolute -hx-mt-20" id="1-cron-job">&lt;/span>
-&lt;a href="#1-cron-job" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>cron-job 分布式任务调度平台是一种用于管理微服务系统中定时任务的软件系统，它提供了一种简单易用、超低延迟、支持用户权限管理、多语言客户端和多租户接入的方式来高效调度和执行任务。&lt;/p>
+&lt;a href="#%e4%b8%80%e4%bb%8b%e7%bb%8d" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;h5>1. Cron-Job&lt;span class="hx-absolute -hx-mt-20" id="1-cron-job">&lt;/span>
+&lt;a href="#1-cron-job" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>Cron-Job 分布式任务调度平台是一种用于管理微服务系统中定时任务的软件系统，它提供了一种简单易用、超低延迟、支持用户权限管理、多语言客户端和多租户接入的方式来高效调度和执行任务。&lt;/p>
 &lt;h5>2. 技术栈&lt;span class="hx-absolute -hx-mt-20" id="2-技术栈">&lt;/span>
-&lt;a href="#2-%e6%8a%80%e6%9c%af%e6%a0%88" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>cron-job 分布式任务调度平台是前后端分离的架构，服务端基于Java语言开发，前端基于Ant Design Pro开发，采用互联网主流技术栈构建而成。涉及的主要技术栈有：&lt;/p>
+&lt;a href="#2-%e6%8a%80%e6%9c%af%e6%a0%88" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>Cron-Job 分布式任务调度平台是前后端分离的架构，服务端基于Java语言开发，前端基于Ant Design Pro开发，采用互联网主流技术栈构建而成。涉及的主要技术栈有：&lt;/p>
 &lt;ul>
 &lt;li>服务端：MySQL、Druid、MyBatis、MyBatis-Generator、HttpClient、Spring Boot等。&lt;/li>
 &lt;li>前端：React、Ant Design Pro、Ant Design Charts、Babel、Eslint、Axios等。&lt;/li>
 &lt;/ul>
 &lt;h5>3. 基本概念&lt;span class="hx-absolute -hx-mt-20" id="3-基本概念">&lt;/span>
 &lt;a href="#3-%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
-&lt;li>&lt;strong>租户&lt;/strong>：租户是指系统中不同的业务方，每个租户在cron-job中拥有独立的权限管理和资源隔离。&lt;/li>
+&lt;li>&lt;strong>租户&lt;/strong>：租户是指系统中不同的业务方，每个租户在Cron-Job中拥有独立的权限管理和资源隔离。&lt;/li>
 &lt;li>&lt;strong>调度器&lt;/strong>：调度器是指系统中负责任务调度的服务，它可以根据任务的配置信息，在指定的时间点派发任务给执行器。&lt;/li>
 &lt;li>&lt;strong>应用&lt;/strong>：应用是接入方的一个微服务，它受调度器的调度，一个应用下一般有多个实例。&lt;/li>
 &lt;li>&lt;strong>执行器&lt;/strong>：执行器是应用的一个实例，负责执行任务的具体逻辑，一个应用下一般有多个执行器。&lt;/li>
@@ -189,7 +189,7 @@ title="Copy code"
 &lt;li>订单超时自动取消&lt;/li>
 &lt;li>批量分片处理等等&lt;/li>
 &lt;/ul>
-&lt;h4>二、为什么需要cron-job&lt;span class="hx-absolute -hx-mt-20" id="二为什么需要cron-job">&lt;/span>
+&lt;h4>二、为什么需要Cron-Job&lt;span class="hx-absolute -hx-mt-20" id="二为什么需要cron-job">&lt;/span>
 &lt;a href="#%e4%ba%8c%e4%b8%ba%e4%bb%80%e4%b9%88%e9%9c%80%e8%a6%81cron-job" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>假如有一个需求，需要每天凌晨1点执行一次统计任务，一般是使用分布式锁（Redis、ZK、MySQL）等方式，保证同一时刻只有一个任务执行。整个应用中如果有多个这类任务则需要重复维护，如果扩大到整个公司的业务来看，效率将是低下的，并且以下诉求很难得到满足：&lt;/p>
 &lt;ul>
 &lt;li>不支持任务参数的动态调整，例如某类任务需要根据特定参数做一些特性化事情的时候。&lt;/li>
@@ -198,7 +198,7 @@ title="Copy code"
 &lt;li>任务执行数据难以统计，任务的执行的耗时、失败次数、执行次数等，都难以统计。&lt;/li>
 &lt;li>不支持任务的停止，例如在机房迁移等一些场景，需要暂时性的停止任务。&lt;/li>
 &lt;/ul>
-&lt;p>&lt;strong>但是 cron-job 可以很好的解决这些问题，并且接入简单、超低延迟、可靠性高，使用起来非常方便。&lt;/strong>&lt;/p>
+&lt;p>&lt;strong>但是 Cron-Job 可以很好的解决这些问题，并且接入简单、超低延迟、可靠性高，使用起来非常方便。&lt;/strong>&lt;/p>
 &lt;h4>三、基本架构&lt;span class="hx-absolute -hx-mt-20" id="三基本架构">&lt;/span>
 &lt;a href="#%e4%b8%89%e5%9f%ba%e6%9c%ac%e6%9e%b6%e6%9e%84" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;h5>1. 模块架构&lt;span class="hx-absolute -hx-mt-20" id="1-模块架构">&lt;/span>
 &lt;a href="#1-%e6%a8%a1%e5%9d%97%e6%9e%b6%e6%9e%84" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;img alt="模块架构" src="https://example.org/images/module_arch.png" style="margin-left: 0;">
@@ -312,7 +312,7 @@ title="Copy code"
 &lt;h4>二、下载地址&lt;span class="hx-absolute -hx-mt-20" id="二下载地址">&lt;/span>
 &lt;a href="#%e4%ba%8c%e4%b8%8b%e8%bd%bd%e5%9c%b0%e5%9d%80" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;ul>
 &lt;li>GitHub：https://github.com/horacedh/cron-job&lt;/li>
-&lt;li>GitEE：https://gitee.com/horacedh/cron-job&lt;/li>
+&lt;li>Gitee：https://gitee.com/horacedh/cron-job&lt;/li>
 &lt;/ul>
 &lt;h4>三、初始化数据库&lt;span class="hx-absolute -hx-mt-20" id="三初始化数据库">&lt;/span>
 &lt;a href="#%e4%b8%89%e5%88%9d%e5%a7%8b%e5%8c%96%e6%95%b0%e6%8d%ae%e5%ba%93" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>从源码根目录下，找到&lt;code>mysql.sql&lt;/code>文件，进入到MySQL命令行中，执行以下命令即可完成初始化，其中path替换为自己的路径：&lt;/p>
@@ -688,7 +688,7 @@ title="Copy code"
 &lt;a href="#%e4%ba%8c%e6%9e%84%e5%bb%ba%e9%83%a8%e7%bd%b2%e5%8c%85" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;h5>1. 源码下载&lt;span class="hx-absolute -hx-mt-20" id="1-源码下载">&lt;/span>
 &lt;a href="#1-%e6%ba%90%e7%a0%81%e4%b8%8b%e8%bd%bd" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
 &lt;li>GitHub：https://github.com/horacedh/cron-job&lt;/li>
-&lt;li>GitEE：https://gitee.com/horacedh/cron-job&lt;/li>
+&lt;li>Gitee：https://gitee.com/horacedh/cron-job&lt;/li>
 &lt;/ul>
 &lt;h5>2. 开始构建&lt;span class="hx-absolute -hx-mt-20" id="2-开始构建">&lt;/span>
 &lt;a href="#2-%e5%bc%80%e5%a7%8b%e6%9e%84%e5%bb%ba" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
@@ -944,10 +944,10 @@ title="Copy code"
 &lt;p>&lt;img src="https://example.org/images/tasklog_detail.png" alt="任务日志列表" loading="lazy" />&lt;/p></description></item><item><title>常见问题</title><link>https://example.org/docs/issue/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/issue/</guid><description/></item><item><title>更新记录</title><link>https://example.org/docs/version/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/version/</guid><description>
 &lt;h5>2025-02-15 版本1.0.1&lt;span class="hx-absolute -hx-mt-20" id="2025-02-15-版本101">&lt;/span>
 &lt;a href="#2025-02-15-%e7%89%88%e6%9c%ac101" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
-&lt;li>cron-job分布式任务调度平台首次发布。&lt;/li>
+&lt;li>Cron-Job分布式任务调度平台首次发布。&lt;/li>
 &lt;li>包含完整的调度能力。&lt;/li>
 &lt;/ul></description></item><item><title>关于</title><link>https://example.org/docs/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/about/</guid><description>
-&lt;h4>一、关于cron-job&lt;span class="hx-absolute -hx-mt-20" id="一关于cron-job">&lt;/span>
+&lt;h4>一、关于Cron-Job&lt;span class="hx-absolute -hx-mt-20" id="一关于cron-job">&lt;/span>
 &lt;a href="#%e4%b8%80%e5%85%b3%e4%ba%8ecron-job" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>业内已经有很多类似的调度平台，为什么我会再自研一个？主要有以下几点的考虑：&lt;/p>
 &lt;h5>1. 构建自己的产品&lt;span class="hx-absolute -hx-mt-20" id="1-构建自己的产品">&lt;/span>
 &lt;a href="#1-%e6%9e%84%e5%bb%ba%e8%87%aa%e5%b7%b1%e7%9a%84%e4%ba%a7%e5%93%81" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
@@ -1003,6 +1003,6 @@ title="Copy code"
 &lt;h4>四、联系我&lt;span class="hx-absolute -hx-mt-20" id="四联系我">&lt;/span>
 &lt;a href="#%e5%9b%9b%e8%81%94%e7%b3%bb%e6%88%91" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;ul>
 &lt;li>邮箱：&lt;code>Horace_DH@163.com&lt;/code> (注明来意)。&lt;/li>
-&lt;li>微信：&lt;code>Horace_2020&lt;/code>，加我备注&amp;quot;cron-job&amp;quot;，拉你到官方交流群；如果这个产品解决了你的问题，也欢迎你请我喝咖啡😁。
+&lt;li>微信：&lt;code>Horace_2020&lt;/code>，加我备注&amp;quot;Cron-Job&amp;quot;，拉你到官方交流群；如果这个产品解决了你的问题，也欢迎你请我喝咖啡😁。
 &lt;img alt="微信二维码" src="https://example.org/images/wechat.jpg" width="500" style="margin-left: 0;">&lt;/li>
 &lt;/ul></description></item></channel></rss>
