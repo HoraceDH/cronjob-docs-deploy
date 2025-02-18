@@ -520,7 +520,6 @@ title="Copy code"
 &lt;a href="#3-%e5%90%af%e5%8a%a8nginx" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>访问&lt;code>http://127.0.0.1&lt;/code>，实际访问地址根据自身部署的站点情况调整，实际生产部署需要配置域名。&lt;/p>
 &lt;h5>4. 登录任务调度平台&lt;span class="hx-absolute -hx-mt-20" id="4-登录任务调度平台">&lt;/span>
 &lt;a href="#4-%e7%99%bb%e5%bd%95%e4%bb%bb%e5%8a%a1%e8%b0%83%e5%ba%a6%e5%b9%b3%e5%8f%b0" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>看到如下页面时，说明部署成功，输入账号密码 admin/admin 进入系统：
-&lt;img alt="管理后台主页" src="https://example.org/images/deploy/login.png" style="margin-left: 0;">
 &lt;img alt="管理后台主页" src="https://example.org/images/deploy/deploy_success.png" style="margin-left: 0;">&lt;/p>
 &lt;h4>六、启动示例工程&lt;span class="hx-absolute -hx-mt-20" id="六启动示例工程">&lt;/span>
 &lt;a href="#%e5%85%ad%e5%90%af%e5%8a%a8%e7%a4%ba%e4%be%8b%e5%b7%a5%e7%a8%8b" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;h5>1. 进入目录&lt;span class="hx-absolute -hx-mt-20" id="1-进入目录">&lt;/span>
