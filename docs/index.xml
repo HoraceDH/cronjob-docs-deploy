@@ -1117,6 +1117,10 @@ title="Copy code"
 &lt;li>执行失败，重试中：表示上一次任务执行失败，正在重试中。&lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://example.org/images/tasklog_detail.png" alt="任务日志列表" loading="lazy" />&lt;/p></description></item><item><title>常见问题</title><link>https://example.org/docs/issue/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/issue/</guid><description/></item><item><title>更新记录</title><link>https://example.org/docs/version/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/version/</guid><description>
+&lt;h5>2025-02-18 版本1.0.2&lt;span class="hx-absolute -hx-mt-20" id="2025-02-18-版本102">&lt;/span>
+&lt;a href="#2025-02-18-%e7%89%88%e6%9c%ac102" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
+&lt;li>修改相关描述信息。&lt;/li>
+&lt;/ul>
 &lt;h5>2025-02-15 版本1.0.1&lt;span class="hx-absolute -hx-mt-20" id="2025-02-15-版本101">&lt;/span>
 &lt;a href="#2025-02-15-%e7%89%88%e6%9c%ac101" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
 &lt;li>Cron-Job分布式任务调度平台首次发布。&lt;/li>
