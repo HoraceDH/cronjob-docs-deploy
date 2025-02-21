@@ -1117,10 +1117,42 @@ title="Copy code"
 &lt;li>执行失败，重试中：表示上一次任务执行失败，正在重试中。&lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://example.org/images/tasklog_detail.png" alt="任务日志列表" loading="lazy" />&lt;/p></description></item><item><title>常见问题</title><link>https://example.org/docs/issue/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/issue/</guid><description/></item><item><title>更新记录</title><link>https://example.org/docs/version/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/version/</guid><description>
+&lt;h5>2025-02-22 版本1.0.4&lt;span class="hx-absolute -hx-mt-20" id="2025-02-22-版本104">&lt;/span>
+&lt;a href="#2025-02-22-%e7%89%88%e6%9c%ac104" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述">&lt;/span>
+&lt;a href="#%e7%89%88%e6%9c%ac%e6%8f%8f%e8%bf%b0" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;li>记录管理后台操作日志，方便事后回溯操作行为。&lt;/li>
+&lt;li>如果一段时间内没有任何在线的执行器，就停止该应用，避免无意义调度&lt;/li>
+&lt;/ul>
+&lt;h6>升级指引&lt;span class="hx-absolute -hx-mt-20" id="升级指引">&lt;/span>
+&lt;a href="#%e5%8d%87%e7%ba%a7%e6%8c%87%e5%bc%95" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;li>如果你是从 v1.0.3 以及之前的版本升级到 v1.0.4，需要注意以下几点
+&lt;ul>
+&lt;li>在 &lt;code>application.properties&lt;/code> 中手动添加以下配置：&lt;/li>
+&lt;/ul>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-properties" data-lang="properties">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 如果所有的执行器离线太久，则自动停止应用，避免无意义的调度，单位分钟&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">executor.autoStopAppMinutes&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">15&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;ul>
+&lt;li>cronjob-managerui有变更，需要同步更新，将旧文件全部删除，然后将新文件复制过来。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>如果你是首次使用该版本，则可以无视这个升级指引。&lt;/li>
+&lt;/ul>
+&lt;hr/>
 &lt;h5>2025-02-18 版本1.0.2&lt;span class="hx-absolute -hx-mt-20" id="2025-02-18-版本102">&lt;/span>
 &lt;a href="#2025-02-18-%e7%89%88%e6%9c%ac102" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
 &lt;li>修改相关描述信息。&lt;/li>
 &lt;/ul>
+&lt;hr/>
 &lt;h5>2025-02-15 版本1.0.1&lt;span class="hx-absolute -hx-mt-20" id="2025-02-15-版本101">&lt;/span>
 &lt;a href="#2025-02-15-%e7%89%88%e6%9c%ac101" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
 &lt;li>Cron-Job分布式任务调度平台首次发布。&lt;/li>
