@@ -240,7 +240,7 @@ title="Copy code"
 &lt;/li>
 &lt;li>任务标签：
 &lt;ul>
-&lt;li>提供任务标签的功能，方便用户对任务进行分类管理，特别适合开发环境中多迭代的场景。&lt;/li>
+&lt;li>提供任务标签的功能，方便用户对任务进行分类管理，测试环境多迭代场景下，可通过给任务配置Tag标签，实现任务路由到不同的执行器上。&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;li>数据清理：
@@ -1089,9 +1089,12 @@ title="Copy code"
 &lt;img src="https://example.org/images/stop_app.png" alt="" loading="lazy" />&lt;/p></description></item><item><title>任务管理</title><link>https://example.org/docs/manual/task/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/manual/task/</guid><description>
 &lt;h4>一、操作界面&lt;span class="hx-absolute -hx-mt-20" id="一操作界面">&lt;/span>
 &lt;a href="#%e4%b8%80%e6%93%8d%e4%bd%9c%e7%95%8c%e9%9d%a2" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;ul>
-&lt;li>启动、启动任务：都是启动任务，区别在于，外层的【启动】按钮更为快捷，不需要点开【更多】。&lt;/li>
-&lt;li>跑一次、执行一次：都表示只执行一次，但是不启动任务，适用于需要手动触发一次的场景，并且可以设定参数。&lt;/li>
-&lt;li>标签：任务的标签，规划是用于分类管理任务的，方便测试环境多迭代场景使用。
+&lt;li>启动、停止：表示启动和停止任务，这两个按钮是互斥的，同一状态下只会出现一个。&lt;/li>
+&lt;li>执行：只会执行一次，但不会启动任务，适用于需要手动触发一次的场景，并且可以设定参数。&lt;/li>
+&lt;li>编辑：进入任务的编辑页面。&lt;/li>
+&lt;li>日志：查看当前任务已经执行成功的任务日志。&lt;/li>
+&lt;li>详情：查看任务的详情信息。&lt;/li>
+&lt;li>标签列：任务的标签，方便用户对任务进行分类管理，测试环境多迭代场景下，可通过给任务配置Tag标签，实现任务路由到不同的执行器上。
 &lt;img src="https://example.org/images/start_task.png" alt="任务管理" loading="lazy" />&lt;/li>
 &lt;/ul>
 &lt;h4>二、编辑任务&lt;span class="hx-absolute -hx-mt-20" id="二编辑任务">&lt;/span>
@@ -1117,14 +1120,80 @@ title="Copy code"
 &lt;li>执行失败，重试中：表示上一次任务执行失败，正在重试中。&lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://example.org/images/tasklog_detail.png" alt="任务日志列表" loading="lazy" />&lt;/p></description></item><item><title>常见问题</title><link>https://example.org/docs/issue/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/issue/</guid><description/></item><item><title>更新记录</title><link>https://example.org/docs/version/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/version/</guid><description>
-&lt;h5>2025-02-22 版本1.0.4&lt;span class="hx-absolute -hx-mt-20" id="2025-02-22-版本104">&lt;/span>
-&lt;a href="#2025-02-22-%e7%89%88%e6%9c%ac104" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述">&lt;/span>
+&lt;h5>2025-02-22 版本 v1.0.5&lt;span class="hx-absolute -hx-mt-20" id="2025-02-22-版本-v105">&lt;/span>
+&lt;a href="#2025-02-22-%e7%89%88%e6%9c%ac-v105" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述">&lt;/span>
 &lt;a href="#%e7%89%88%e6%9c%ac%e6%8f%8f%e8%bf%b0" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
-&lt;li>记录管理后台操作日志，方便事后回溯操作行为。&lt;/li>
-&lt;li>如果一段时间内没有任何在线的执行器，就停止该应用，避免无意义调度&lt;/li>
+&lt;li>任务列表操作列增加【日志】按钮，可快捷查看调度成功的任务日志记录。&lt;/li>
+&lt;li>解决停止任务后立马又启动时，任务调度不连续的问题。&lt;/li>
+&lt;li>调度大盘的折线图统计数据，增加任务维度的筛选。&lt;/li>
+&lt;li>任务的调度，增加Tag标签路由的功能，测试环境多迭代场景下，可通过给任务配置Tag标签，实现任务路由到不同的执行器上。&lt;/li>
 &lt;/ul>
 &lt;h6>升级指引&lt;span class="hx-absolute -hx-mt-20" id="升级指引">&lt;/span>
 &lt;a href="#%e5%8d%87%e7%ba%a7%e6%8c%87%e5%bc%95" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;li>如果你是从 v1.0.4 的版本升级到 v1.0.5，需要注意以下几点
+&lt;ul>
+&lt;li>增加任务维度的统计数据表&lt;/li>
+&lt;/ul>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="o">#&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="err">任务级别统计数据表&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">create&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">table&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">t_task_statistics&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">date_scale&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">datetime&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;统计时间，分钟级&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">task_id&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">bigint&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;任务ID&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">task_name&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">varchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;任务名&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">scheduler_success&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;调度成功&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">scheduler_failed&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;调度失败&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">delay_avg&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">double&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;平均延迟&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">delay_max&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">double&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;最大延迟&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">delay_min&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">double&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;最小延迟&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">elapsed_avg&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">double&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;平均耗时&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">elapsed_max&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">double&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;最大耗时&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">elapsed_min&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">double&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;最小耗时&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">before_avg&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">double&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;平均提前调度时间，毫秒&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">before_max&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">double&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;最大提前调度时间，毫秒&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">before_min&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">double&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;最小提前调度时间，毫秒&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">create_time&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">datetime&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">current_timestamp&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;创建时间&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">modify_time&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">datetime&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">current_timestamp&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;修改时间&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">update&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">current_timestamp&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">primary&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">key&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">date_scale&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">task_id&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;任务级别统计数据表&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;ul>
+&lt;li>任务日志表增加执行器的主机名字段&lt;/li>
+&lt;/ul>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="o">#&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="err">任务日志表增加执行器主机名&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">alter&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">table&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">t_task_log&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">add&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">column&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">executor_host_name&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">varchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;主机名&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">after&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">executor_address&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="p">;&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;ul>
+&lt;li>cronjob-managerui有变更，需要同步更新，将旧文件全部删除，然后将新文件复制过来。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>如果你是首次使用该版本，则可以无视这个升级指引。&lt;/li>
+&lt;/ul>
+&lt;hr/>
+&lt;h5>2025-02-22 版本 v1.0.4&lt;span class="hx-absolute -hx-mt-20" id="2025-02-22-版本-v104">&lt;/span>
+&lt;a href="#2025-02-22-%e7%89%88%e6%9c%ac-v104" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述-1">&lt;/span>
+&lt;a href="#%e7%89%88%e6%9c%ac%e6%8f%8f%e8%bf%b0-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;li>记录管理后台操作日志，方便事后回溯操作行为。&lt;/li>
+&lt;li>如果一段时间内没有任何在线的执行器，就停止该应用，避免无意义调度&lt;/li>
+&lt;/ul>
+&lt;h6>升级指引&lt;span class="hx-absolute -hx-mt-20" id="升级指引-1">&lt;/span>
+&lt;a href="#%e5%8d%87%e7%ba%a7%e6%8c%87%e5%bc%95-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
 &lt;li>如果你是从 v1.0.3 以及之前的版本升级到 v1.0.4，需要注意以下几点
 &lt;ul>
 &lt;li>在 &lt;code>application.properties&lt;/code> 中手动添加以下配置：&lt;/li>
@@ -1148,13 +1217,13 @@ title="Copy code"
 &lt;li>如果你是首次使用该版本，则可以无视这个升级指引。&lt;/li>
 &lt;/ul>
 &lt;hr/>
-&lt;h5>2025-02-18 版本1.0.2&lt;span class="hx-absolute -hx-mt-20" id="2025-02-18-版本102">&lt;/span>
-&lt;a href="#2025-02-18-%e7%89%88%e6%9c%ac102" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
+&lt;h5>2025-02-18 版本 v1.0.2&lt;span class="hx-absolute -hx-mt-20" id="2025-02-18-版本-v102">&lt;/span>
+&lt;a href="#2025-02-18-%e7%89%88%e6%9c%ac-v102" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
 &lt;li>修改相关描述信息。&lt;/li>
 &lt;/ul>
 &lt;hr/>
-&lt;h5>2025-02-15 版本1.0.1&lt;span class="hx-absolute -hx-mt-20" id="2025-02-15-版本101">&lt;/span>
-&lt;a href="#2025-02-15-%e7%89%88%e6%9c%ac101" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
+&lt;h5>2025-02-15 版本 v1.0.1&lt;span class="hx-absolute -hx-mt-20" id="2025-02-15-版本-v101">&lt;/span>
+&lt;a href="#2025-02-15-%e7%89%88%e6%9c%ac-v101" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
 &lt;li>Cron-Job分布式任务调度平台首次发布。&lt;/li>
 &lt;li>包含完整的调度能力。&lt;/li>
 &lt;/ul></description></item><item><title>关于</title><link>https://example.org/docs/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/about/</guid><description>

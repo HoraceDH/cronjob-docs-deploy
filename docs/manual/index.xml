@@ -185,9 +185,12 @@ title="Copy code"
 &lt;img src="https://example.org/images/stop_app.png" alt="" loading="lazy" />&lt;/p></description></item><item><title>任务管理</title><link>https://example.org/docs/manual/task/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/manual/task/</guid><description>
 &lt;h4>一、操作界面&lt;span class="hx-absolute -hx-mt-20" id="一操作界面">&lt;/span>
 &lt;a href="#%e4%b8%80%e6%93%8d%e4%bd%9c%e7%95%8c%e9%9d%a2" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;ul>
-&lt;li>启动、启动任务：都是启动任务，区别在于，外层的【启动】按钮更为快捷，不需要点开【更多】。&lt;/li>
-&lt;li>跑一次、执行一次：都表示只执行一次，但是不启动任务，适用于需要手动触发一次的场景，并且可以设定参数。&lt;/li>
-&lt;li>标签：任务的标签，规划是用于分类管理任务的，方便测试环境多迭代场景使用。
+&lt;li>启动、停止：表示启动和停止任务，这两个按钮是互斥的，同一状态下只会出现一个。&lt;/li>
+&lt;li>执行：只会执行一次，但不会启动任务，适用于需要手动触发一次的场景，并且可以设定参数。&lt;/li>
+&lt;li>编辑：进入任务的编辑页面。&lt;/li>
+&lt;li>日志：查看当前任务已经执行成功的任务日志。&lt;/li>
+&lt;li>详情：查看任务的详情信息。&lt;/li>
+&lt;li>标签列：任务的标签，方便用户对任务进行分类管理，测试环境多迭代场景下，可通过给任务配置Tag标签，实现任务路由到不同的执行器上。
 &lt;img src="https://example.org/images/start_task.png" alt="任务管理" loading="lazy" />&lt;/li>
 &lt;/ul>
 &lt;h4>二、编辑任务&lt;span class="hx-absolute -hx-mt-20" id="二编辑任务">&lt;/span>
