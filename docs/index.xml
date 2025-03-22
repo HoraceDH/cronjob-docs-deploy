@@ -898,7 +898,7 @@ title="Copy code"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 调度器预生成任务日志的时候，只预生成生成配置值分钟以内的任务日志&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">schedulers.taskPreGenerationMaxTimeMinutes&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">3&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 任务日志、执行器记录、统计记录最大保留的天数&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">data.maxRetainDays&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">5&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">taskLog.maxRetainDays&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">5&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 管理后台与调度器通信的签名Key&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">manager.signKey&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">6b540a079699b196d678af5801b79b4e&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 执行器与调度器通信的签名Key&lt;/span>
@@ -908,6 +908,8 @@ title="Copy code"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">############# 执行器配置 #############&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 执行器的超时时间，超过这个时间没有心跳则认为是下线&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">executor.timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">30000&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 如果所有的执行器离线太久，则自动停止应用，避免无意义的调度，单位分钟&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">executor.autoStopAppMinutes&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">15&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">############# 执行器配置 #############&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">############# 数据源配置 #############&lt;/span>
@@ -938,7 +940,25 @@ title="Copy code"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">server.tomcat.threads.max&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">600&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 最小工作线程数&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">server.tomcat.threads.min-spare&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">10&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">############# Tomcat配置 #############&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">############# Tomcat配置 #############&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">############# 告警配置 #############&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 调度平台域名，用于告警卡片的跳转&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">domain&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">http://localhost:8000&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 需要创建应用并给应用添加机器人能力，然后获取appId和appSecret，同时需要将机器人拉入告警群，之后获取应用的的appId和appSecret填入下面的配置中&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 飞书/Lark需要具备以下权限，注意的是【应用身份】权限&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获取群组信息 im:chat:readonly&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获取与发送单聊、群组消息 im:message&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Lark配置&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">lark.appId&lt;/span>&lt;span class="o">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">lark.appSecret&lt;/span>&lt;span class="o">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 飞书配置&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">feiShu.appId&lt;/span>&lt;span class="o">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">feiShu.appSecret&lt;/span>&lt;span class="o">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">############# 告警配置 #############&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
 &lt;button
 class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
 title="Copy code"
@@ -1119,17 +1139,166 @@ title="Copy code"
 &lt;li>执行失败，已丢弃：任务执行失败，并且失败策略是丢弃，表示任务日志已被丢弃。&lt;/li>
 &lt;li>执行失败，重试中：表示上一次任务执行失败，正在重试中。&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://example.org/images/tasklog_detail.png" alt="任务日志列表" loading="lazy" />&lt;/p></description></item><item><title>常见问题</title><link>https://example.org/docs/issue/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/issue/</guid><description/></item><item><title>更新记录</title><link>https://example.org/docs/version/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/version/</guid><description>
-&lt;h5>2025-03-02 版本 v1.0.5&lt;span class="hx-absolute -hx-mt-20" id="2025-03-02-版本-v105">&lt;/span>
-&lt;a href="#2025-03-02-%e7%89%88%e6%9c%ac-v105" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述">&lt;/span>
+&lt;p>&lt;img src="https://example.org/images/tasklog_detail.png" alt="任务日志列表" loading="lazy" />&lt;/p></description></item><item><title>常见问题</title><link>https://example.org/docs/issue/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/issue/</guid><description/></item><item><title>告警配置</title><link>https://example.org/docs/manual/alarm_config/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/manual/alarm_config/</guid><description>
+&lt;h4>一、前提条件&lt;span class="hx-absolute -hx-mt-20" id="一前提条件">&lt;/span>
+&lt;a href="#%e4%b8%80%e5%89%8d%e6%8f%90%e6%9d%a1%e4%bb%b6" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;h5>1、申请应用及权限&lt;span class="hx-absolute -hx-mt-20" id="1申请应用及权限">&lt;/span>
+&lt;a href="#1%e7%94%b3%e8%af%b7%e5%ba%94%e7%94%a8%e5%8f%8a%e6%9d%83%e9%99%90" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
+&lt;li>需要在Lark/飞书的开放平台中创建应用并添加机器人能力，然后获取应用的appId和appSecret，同时需要将机器人拉入告警群。&lt;/li>
+&lt;li>给刚刚新建的应用添加【应用身份】权限
+&lt;ul>
+&lt;li>获取群组信息 im:chat:readonly&lt;/li>
+&lt;li>获取与发送单聊、群组消息 im:message&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h5>2、调度器配置告警渠道&lt;span class="hx-absolute -hx-mt-20" id="2调度器配置告警渠道">&lt;/span>
+&lt;a href="#2%e8%b0%83%e5%ba%a6%e5%99%a8%e9%85%8d%e7%bd%ae%e5%91%8a%e8%ad%a6%e6%b8%a0%e9%81%93" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;p>需要在调度器中配置告警渠道的appId和appSecret，方可在后台中选择对应的告警方式，&lt;code>application.properties&lt;/code>配置内容如下：&lt;/p>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+&lt;pre>&lt;code>############# 告警配置 #############
+# 调度平台域名，用于告警卡片的跳转
+domain=http://localhost:8000
+# 需要创建应用并给应用添加机器人能力，然后获取appId和appSecret，同时需要将机器人拉入告警群，之后获取应用的的appId和appSecret填入下面的配置中
+# 飞书/Lark需要具备以下权限，注意的是【应用身份】权限
+# 获取群组信息 im:chat:readonly
+# 获取与发送单聊、群组消息 im:message
+# Lark配置
+lark.appId=
+lark.appSecret=
+# 飞书配置
+feiShu.appId=
+feiShu.appSecret=
+############# 告警配置 #############&lt;/code>&lt;/pre>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h4>二、告警配置&lt;span class="hx-absolute -hx-mt-20" id="二告警配置">&lt;/span>
+&lt;a href="#%e4%ba%8c%e5%91%8a%e8%ad%a6%e9%85%8d%e7%bd%ae" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;ul>
+&lt;li>目前告警配置基于租户级别，因此告警的配置对租户下的所有应用和任务生效。&lt;/li>
+&lt;li>告警方式的选择：需要先配置告警渠道，这里才能有的选择。&lt;/li>
+&lt;li>告警群组的选择：需要先将机器人拉入告警群，默认会拉取群创建时间倒排的100个群。&lt;/li>
+&lt;li>点击【触发一下】按钮可查看对应群的告警效果，以检查是否配置正确。&lt;/li>
+&lt;li>配置页面示例：&lt;/li>
+&lt;/ul>
+&lt;img src="https://example.org/images/tenant_alarm_config.png" style="margin-left: 0;">
+&lt;h4>三、告警示例&lt;span class="hx-absolute -hx-mt-20" id="三告警示例">&lt;/span>
+&lt;a href="#%e4%b8%89%e5%91%8a%e8%ad%a6%e7%a4%ba%e4%be%8b" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;img src="https://example.org/images/alarm_example.png" style="margin-left: 0;">
+&lt;ul>
+&lt;li>点击【查看详情】可跳转到调度平台的任务详情页，查看错误堆栈。&lt;/li>
+&lt;li>&lt;code>application.properties&lt;/code>的domain配置是跳转的前提，需要设定实际的调度平台域名。&lt;/li>
+&lt;/ul></description></item><item><title>更新记录</title><link>https://example.org/docs/version/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/version/</guid><description>
+&lt;h5>版本 v1.0.7 版本规划&lt;span class="hx-absolute -hx-mt-20" id="版本-v107-版本规划">&lt;/span>
+&lt;a href="#%e7%89%88%e6%9c%ac-v107-%e7%89%88%e6%9c%ac%e8%a7%84%e5%88%92" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
+&lt;li>新增Go执行器SDK&lt;/li>
+&lt;/ul>
+&lt;hr/>
+&lt;h5>2025-03-22 版本 v1.0.6&lt;span class="hx-absolute -hx-mt-20" id="2025-03-22-版本-v106">&lt;/span>
+&lt;a href="#2025-03-22-%e7%89%88%e6%9c%ac-v106" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述">&lt;/span>
 &lt;a href="#%e7%89%88%e6%9c%ac%e6%8f%8f%e8%bf%b0" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;li>【优化】优化管理后台页面展示&lt;/li>
+&lt;li>【优化】任务日志详情页面增加执行器主机名字段。&lt;/li>
+&lt;li>【BugFix】修复调度大盘中数据指标的任务选择名称取错的问题。&lt;/li>
+&lt;li>【新增】大盘展示告警概要列表，可点击查看告警详情。&lt;/li>
+&lt;li>【新增】增加任务失败告警能力，并对接飞书、Lark。&lt;/li>
+&lt;/ul>
+&lt;h6>升级指引&lt;span class="hx-absolute -hx-mt-20" id="升级指引">&lt;/span>
+&lt;a href="#%e5%8d%87%e7%ba%a7%e6%8c%87%e5%bc%95" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;li>如果你是从 v1.0.5 的版本升级到 v1.0.6，需要注意以下几点
+&lt;ul>
+&lt;li>增加告警记录表&lt;/li>
+&lt;/ul>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="o">#&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="err">告警记录表&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">create&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">table&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">t_alarm&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">bigint&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">primary&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">key&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;主键&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">task_log_id&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">bigint&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">unique&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;任务日志ID&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">app_name&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">varchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;应用名&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">task_name&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">varchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;任务名&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">executor_address&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">varchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">50&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;执行器地址&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">executor_host_name&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">varchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;执行器主机名&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="k">method&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">varchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">500&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;任务方法，类全限定名&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">alarm_type&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;告警方式，AlarmType枚举&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="k">state&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;告警状态，AlarmState枚举&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">alarm_group_name&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">varchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">200&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;告警群名称&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">create_time&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">datetime&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">current_timestamp&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;创建时间&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">modify_time&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">datetime&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">current_timestamp&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;修改时间&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">update&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">current_timestamp&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">idx_app_name&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">app_name&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">idx_task_name&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">task_name&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">idx_create_time&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">create_time&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;告警记录表&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;ul>
+&lt;li>修改tenant表，新增alarm_config字段&lt;/li>
+&lt;/ul>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="o">#&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="err">任务日志表增加执行器主机名&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">alter&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">table&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">t_tenant&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">add&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">alarm_config&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">varchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">500&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">default&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;{&amp;#34;chatId&amp;#34;:&amp;#34;不设置告警&amp;#34;,&amp;#34;type&amp;#34;:0}&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">comment&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;告警配置，json格式&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">after&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">tenant&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="p">;&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;ul>
+&lt;li>新增告警配置&lt;/li>
+&lt;/ul>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+&lt;pre>&lt;code>############# 告警配置 #############
+# 调度平台域名，用于告警卡片的跳转
+domain=http://localhost:8000
+# 需要创建应用并给应用添加机器人能力，然后获取appId和appSecret，同时需要将机器人拉入告警群，之后获取应用的的appId和appSecret填入下面的配置中
+# 飞书/Lark需要具备以下权限，注意的是【应用身份】权限
+# 获取群组信息 im:chat:readonly
+# 获取与发送单聊、群组消息 im:message
+# Lark配置
+lark.appId=
+lark.appSecret=
+# 飞书配置
+feiShu.appId=
+feiShu.appSecret=
+############# 告警配置 #############&lt;/code>&lt;/pre>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;ul>
+&lt;li>cronjob-managerui有变更，需要同步更新，将旧文件全部删除，然后将新文件复制过来。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>如果你是首次使用该版本，则可以无视这个升级指引。&lt;/li>
+&lt;/ul>
+&lt;hr/>
+&lt;h5>2025-03-02 版本 v1.0.5&lt;span class="hx-absolute -hx-mt-20" id="2025-03-02-版本-v105">&lt;/span>
+&lt;a href="#2025-03-02-%e7%89%88%e6%9c%ac-v105" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述-1">&lt;/span>
+&lt;a href="#%e7%89%88%e6%9c%ac%e6%8f%8f%e8%bf%b0-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
 &lt;li>任务列表操作列增加【日志】按钮，可快捷查看调度成功的任务日志记录。&lt;/li>
 &lt;li>解决停止任务后立马又启动时，任务调度不连续的问题。&lt;/li>
 &lt;li>调度大盘的折线图统计数据，增加任务维度的筛选。&lt;/li>
 &lt;li>任务的调度，增加Tag标签路由的功能，测试环境多迭代场景下，可通过给任务配置Tag标签，实现任务路由到不同的执行器上。&lt;/li>
 &lt;/ul>
-&lt;h6>升级指引&lt;span class="hx-absolute -hx-mt-20" id="升级指引">&lt;/span>
-&lt;a href="#%e5%8d%87%e7%ba%a7%e6%8c%87%e5%bc%95" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;h6>升级指引&lt;span class="hx-absolute -hx-mt-20" id="升级指引-1">&lt;/span>
+&lt;a href="#%e5%8d%87%e7%ba%a7%e6%8c%87%e5%bc%95-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
 &lt;li>如果你是从 v1.0.4 的版本升级到 v1.0.5，需要注意以下几点
 &lt;ul>
 &lt;li>增加任务维度的统计数据表&lt;/li>
@@ -1187,13 +1356,13 @@ title="Copy code"
 &lt;/ul>
 &lt;hr/>
 &lt;h5>2025-02-22 版本 v1.0.4&lt;span class="hx-absolute -hx-mt-20" id="2025-02-22-版本-v104">&lt;/span>
-&lt;a href="#2025-02-22-%e7%89%88%e6%9c%ac-v104" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述-1">&lt;/span>
-&lt;a href="#%e7%89%88%e6%9c%ac%e6%8f%8f%e8%bf%b0-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;a href="#2025-02-22-%e7%89%88%e6%9c%ac-v104" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述-2">&lt;/span>
+&lt;a href="#%e7%89%88%e6%9c%ac%e6%8f%8f%e8%bf%b0-2" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
 &lt;li>记录管理后台操作日志，方便事后回溯操作行为。&lt;/li>
 &lt;li>如果一段时间内没有任何在线的执行器，就停止该应用，避免无意义调度&lt;/li>
 &lt;/ul>
-&lt;h6>升级指引&lt;span class="hx-absolute -hx-mt-20" id="升级指引-1">&lt;/span>
-&lt;a href="#%e5%8d%87%e7%ba%a7%e6%8c%87%e5%bc%95-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;h6>升级指引&lt;span class="hx-absolute -hx-mt-20" id="升级指引-2">&lt;/span>
+&lt;a href="#%e5%8d%87%e7%ba%a7%e6%8c%87%e5%bc%95-2" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
 &lt;li>如果你是从 v1.0.3 以及之前的版本升级到 v1.0.4，需要注意以下几点
 &lt;ul>
 &lt;li>在 &lt;code>application.properties&lt;/code> 中手动添加以下配置：&lt;/li>
