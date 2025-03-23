@@ -1192,22 +1192,39 @@ title="Copy code"
 &lt;li>点击【查看详情】可跳转到调度平台的任务详情页，查看错误堆栈。&lt;/li>
 &lt;li>&lt;code>application.properties&lt;/code>的domain配置是跳转的前提，需要设定实际的调度平台域名。&lt;/li>
 &lt;/ul></description></item><item><title>更新记录</title><link>https://example.org/docs/version/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://example.org/docs/version/</guid><description>
-&lt;h5>版本 v1.0.7 版本规划&lt;span class="hx-absolute -hx-mt-20" id="版本-v107-版本规划">&lt;/span>
-&lt;a href="#%e7%89%88%e6%9c%ac-v107-%e7%89%88%e6%9c%ac%e8%a7%84%e5%88%92" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
+&lt;h5>后续版本规划&lt;span class="hx-absolute -hx-mt-20" id="后续版本规划">&lt;/span>
+&lt;a href="#%e5%90%8e%e7%bb%ad%e7%89%88%e6%9c%ac%e8%a7%84%e5%88%92" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;ul>
 &lt;li>新增Go执行器SDK&lt;/li>
 &lt;/ul>
 &lt;hr/>
-&lt;h5>2025-03-22 版本 v1.0.6&lt;span class="hx-absolute -hx-mt-20" id="2025-03-22-版本-v106">&lt;/span>
-&lt;a href="#2025-03-22-%e7%89%88%e6%9c%ac-v106" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述">&lt;/span>
+&lt;h5>2025-03-23 版本 v1.0.7&lt;span class="hx-absolute -hx-mt-20" id="2025-03-23-版本-v107">&lt;/span>
+&lt;a href="#2025-03-23-%e7%89%88%e6%9c%ac-v107" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述">&lt;/span>
 &lt;a href="#%e7%89%88%e6%9c%ac%e6%8f%8f%e8%bf%b0" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;li>【优化】告警方法放入线程池中执行&lt;/li>
+&lt;li>【优化】请求签名去除无用字段，减少请求参数大小。&lt;/li>
+&lt;/ul>
+&lt;h6>升级指引&lt;span class="hx-absolute -hx-mt-20" id="升级指引">&lt;/span>
+&lt;a href="#%e5%8d%87%e7%ba%a7%e6%8c%87%e5%bc%95" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;li>如果你是从 v1.0.6 的版本升级到 v1.0.7，需要注意以下几点
+&lt;ul>
+&lt;li>无数据库、配置等变更，更新cronjob-scheduler即可。&lt;/li>
+&lt;li>cronjob-managerui无变更。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>如果你是首次使用该版本，则可以无视这个升级指引。&lt;/li>
+&lt;/ul>
+&lt;hr/>
+&lt;h5>2025-03-22 版本 v1.0.6&lt;span class="hx-absolute -hx-mt-20" id="2025-03-22-版本-v106">&lt;/span>
+&lt;a href="#2025-03-22-%e7%89%88%e6%9c%ac-v106" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述-1">&lt;/span>
+&lt;a href="#%e7%89%88%e6%9c%ac%e6%8f%8f%e8%bf%b0-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
 &lt;li>【优化】优化管理后台页面展示&lt;/li>
 &lt;li>【优化】任务日志详情页面增加执行器主机名字段。&lt;/li>
 &lt;li>【BugFix】修复调度大盘中数据指标的任务选择名称取错的问题。&lt;/li>
 &lt;li>【新增】大盘展示告警概要列表，可点击查看告警详情。&lt;/li>
 &lt;li>【新增】增加任务失败告警能力，并对接飞书、Lark。&lt;/li>
 &lt;/ul>
-&lt;h6>升级指引&lt;span class="hx-absolute -hx-mt-20" id="升级指引">&lt;/span>
-&lt;a href="#%e5%8d%87%e7%ba%a7%e6%8c%87%e5%bc%95" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;h6>升级指引&lt;span class="hx-absolute -hx-mt-20" id="升级指引-1">&lt;/span>
+&lt;a href="#%e5%8d%87%e7%ba%a7%e6%8c%87%e5%bc%95-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
 &lt;li>如果你是从 v1.0.5 的版本升级到 v1.0.6，需要注意以下几点
 &lt;ul>
 &lt;li>增加告警记录表&lt;/li>
@@ -1290,15 +1307,15 @@ title="Copy code"
 &lt;/ul>
 &lt;hr/>
 &lt;h5>2025-03-02 版本 v1.0.5&lt;span class="hx-absolute -hx-mt-20" id="2025-03-02-版本-v105">&lt;/span>
-&lt;a href="#2025-03-02-%e7%89%88%e6%9c%ac-v105" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述-1">&lt;/span>
-&lt;a href="#%e7%89%88%e6%9c%ac%e6%8f%8f%e8%bf%b0-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;a href="#2025-03-02-%e7%89%88%e6%9c%ac-v105" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述-2">&lt;/span>
+&lt;a href="#%e7%89%88%e6%9c%ac%e6%8f%8f%e8%bf%b0-2" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
 &lt;li>任务列表操作列增加【日志】按钮，可快捷查看调度成功的任务日志记录。&lt;/li>
 &lt;li>解决停止任务后立马又启动时，任务调度不连续的问题。&lt;/li>
 &lt;li>调度大盘的折线图统计数据，增加任务维度的筛选。&lt;/li>
 &lt;li>任务的调度，增加Tag标签路由的功能，测试环境多迭代场景下，可通过给任务配置Tag标签，实现任务路由到不同的执行器上。&lt;/li>
 &lt;/ul>
-&lt;h6>升级指引&lt;span class="hx-absolute -hx-mt-20" id="升级指引-1">&lt;/span>
-&lt;a href="#%e5%8d%87%e7%ba%a7%e6%8c%87%e5%bc%95-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;h6>升级指引&lt;span class="hx-absolute -hx-mt-20" id="升级指引-2">&lt;/span>
+&lt;a href="#%e5%8d%87%e7%ba%a7%e6%8c%87%e5%bc%95-2" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
 &lt;li>如果你是从 v1.0.4 的版本升级到 v1.0.5，需要注意以下几点
 &lt;ul>
 &lt;li>增加任务维度的统计数据表&lt;/li>
@@ -1356,13 +1373,13 @@ title="Copy code"
 &lt;/ul>
 &lt;hr/>
 &lt;h5>2025-02-22 版本 v1.0.4&lt;span class="hx-absolute -hx-mt-20" id="2025-02-22-版本-v104">&lt;/span>
-&lt;a href="#2025-02-22-%e7%89%88%e6%9c%ac-v104" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述-2">&lt;/span>
-&lt;a href="#%e7%89%88%e6%9c%ac%e6%8f%8f%e8%bf%b0-2" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;a href="#2025-02-22-%e7%89%88%e6%9c%ac-v104" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述-3">&lt;/span>
+&lt;a href="#%e7%89%88%e6%9c%ac%e6%8f%8f%e8%bf%b0-3" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
 &lt;li>记录管理后台操作日志，方便事后回溯操作行为。&lt;/li>
 &lt;li>如果一段时间内没有任何在线的执行器，就停止该应用，避免无意义调度&lt;/li>
 &lt;/ul>
-&lt;h6>升级指引&lt;span class="hx-absolute -hx-mt-20" id="升级指引-2">&lt;/span>
-&lt;a href="#%e5%8d%87%e7%ba%a7%e6%8c%87%e5%bc%95-2" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
+&lt;h6>升级指引&lt;span class="hx-absolute -hx-mt-20" id="升级指引-3">&lt;/span>
+&lt;a href="#%e5%8d%87%e7%ba%a7%e6%8c%87%e5%bc%95-3" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
 &lt;li>如果你是从 v1.0.3 以及之前的版本升级到 v1.0.4，需要注意以下几点
 &lt;ul>
 &lt;li>在 &lt;code>application.properties&lt;/code> 中手动添加以下配置：&lt;/li>
