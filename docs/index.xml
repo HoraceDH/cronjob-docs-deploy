@@ -256,6 +256,7 @@ title="Copy code"
 &lt;h4>三、核心优势&lt;span class="hx-absolute -hx-mt-20" id="三核心优势">&lt;/span>
 &lt;a href="#%e4%b8%89%e6%a0%b8%e5%bf%83%e4%bc%98%e5%8a%bf" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;ul>
 &lt;li>现代化的管理后台UI更加精美简洁，并优化了管理后台的交互逻辑，理解和使用更加简单。&lt;/li>
+&lt;li>基于提前调度的策略，避免了网络延迟的问题，任务的调度更加精准。&lt;/li>
 &lt;li>支持多租户接入以及用户权限管理，多业务情况下以不同租户接入，互不干扰。&lt;/li>
 &lt;li>支持任务级别的标签路由能力，测试环境多迭代下可指定路由到不同标签的执行器。&lt;/li>
 &lt;li>执行器和调度器都支持无损的优雅停机，队列中的任务不会丢失，执行器的结果不会丢失。&lt;/li>
