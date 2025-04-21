@@ -1328,7 +1328,7 @@ title="Copy code"
 &lt;h5>版本 v1.0.9 规划&lt;span class="hx-absolute -hx-mt-20" id="版本-v109-规划">&lt;/span>
 &lt;a href="#%e7%89%88%e6%9c%ac-v109-%e8%a7%84%e5%88%92" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h5>&lt;h6>版本描述&lt;span class="hx-absolute -hx-mt-20" id="版本描述">&lt;/span>
 &lt;a href="#%e7%89%88%e6%9c%ac%e6%8f%8f%e8%bf%b0" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h6>&lt;ul>
-&lt;li>【优化】提升万级以上任务量的处理性能。&lt;/li>
+&lt;li>【优化】提升超大任务量场景下的处理性能。&lt;/li>
 &lt;/ul>
 &lt;hr/>
 &lt;h5>2025-04-16 版本 v1.0.8&lt;span class="hx-absolute -hx-mt-20" id="2025-04-16-版本-v108">&lt;/span>
